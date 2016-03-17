@@ -73,11 +73,13 @@
 #### (Roland Bock)
 
 ```cpp
-template <bool ...b>
+template <bool ...> struct bools;
+
+template <typename ...Bools>
 struct logical_and
     : std::is_same<
-        logical_and<b...>,
-        logical_and<(b, true)...>
+        bools<Bools::value...>,
+        bools<(Bools::value, true)...>
     >
 { };
 ```
@@ -92,11 +94,7 @@ template <typename Condition, typename T = void>
 struct lazy_enable_if
     : std::enable_if<Condition::value, T>
 { };
-```
 
-----
-
-```cpp
 std::true_type expand(...);
 
 template <typename ...Bools>
@@ -123,7 +121,15 @@ struct logical_and
 
 ----
 
-<!-- TODO: Benchmark -->
+### When the conditions are light to evaluate
+
+<!-- TODO: show chart -->
+
+----
+
+### When the conditions are heavy to evaluate
+
+<!-- TODO: show chart -->
 
 ====================
 

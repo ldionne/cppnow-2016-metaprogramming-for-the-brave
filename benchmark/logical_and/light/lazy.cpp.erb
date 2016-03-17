@@ -5,14 +5,16 @@
 #include "lazy_logical_and.hpp"
 
 
-template <typename T>
+template <int, typename T>
 struct is_true : T { };
 
 constexpr bool result = logical_and<
     <%=
-        prefix = (0...(n/2)).map { 'is_true<std::true_type>' }.to_a
-        suffix = ((n/2)+1..n).map { 'is_true<std::true_type>' }.to_a
-        (prefix << 'is_true<std::false_type>').concat(suffix).join(', ')
+        [
+            (1...(n/2)).map { |i| "is_true<#{i}, std::true_type>" }.to_a,
+            "is_true<#{n/2}, std::false_type>",
+            ((n/2)+1..n).map { |i| "is_true<#{i}, std::true_type>" }.to_a
+        ].flatten.join(', ')
     %>
 >::value;
 

@@ -7,14 +7,12 @@
 #include <type_traits>
 
 
-// sample(lazy_logical_and-lazy_enable_if)
+// sample(lazy_logical_and)
 template <typename Condition, typename T = void>
 struct lazy_enable_if
     : std::enable_if<Condition::value, T>
 { };
-// end-sample
 
-// sample(lazy_logical_and)
 std::true_type expand(...);
 
 template <typename ...Bools>
