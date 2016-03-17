@@ -3,34 +3,26 @@
 
 #include <type_traits>
 
+#include "eager_logical_and.hpp"
 
-// sample(eager_logical_and)
-template <bool ...b>
-struct logical_and
-    : std::is_same<
-        logical_and<b...>,
-        logical_and<(b, true)...>
-    >
-{ };
-// end-sample
 
 static_assert(logical_and<>::value, "");
 
-static_assert( logical_and<true>::value, "");
-static_assert(!logical_and<false>::value, "");
+static_assert( logical_and<std::true_type>::value, "");
+static_assert(!logical_and<std::false_type>::value, "");
 
-static_assert( logical_and<true, true>::value, "");
-static_assert(!logical_and<true, false>::value, "");
-static_assert(!logical_and<false, true>::value, "");
-static_assert(!logical_and<false, false>::value, "");
+static_assert( logical_and<std::true_type, std::true_type>::value, "");
+static_assert(!logical_and<std::true_type, std::false_type>::value, "");
+static_assert(!logical_and<std::false_type, std::true_type>::value, "");
+static_assert(!logical_and<std::false_type, std::false_type>::value, "");
 
-static_assert( logical_and<true, true, true>::value, "");
-static_assert(!logical_and<true, true, false>::value, "");
-static_assert(!logical_and<true, false, true>::value, "");
-static_assert(!logical_and<true, false, false>::value, "");
-static_assert(!logical_and<false, true, true>::value, "");
-static_assert(!logical_and<false, true, false>::value, "");
-static_assert(!logical_and<false, false, true>::value, "");
-static_assert(!logical_and<false, false, false>::value, "");
+static_assert( logical_and<std::true_type, std::true_type, std::true_type>::value, "");
+static_assert(!logical_and<std::true_type, std::true_type, std::false_type>::value, "");
+static_assert(!logical_and<std::true_type, std::false_type, std::true_type>::value, "");
+static_assert(!logical_and<std::true_type, std::false_type, std::false_type>::value, "");
+static_assert(!logical_and<std::false_type, std::true_type, std::true_type>::value, "");
+static_assert(!logical_and<std::false_type, std::true_type, std::false_type>::value, "");
+static_assert(!logical_and<std::false_type, std::false_type, std::true_type>::value, "");
+static_assert(!logical_and<std::false_type, std::false_type, std::false_type>::value, "");
 
 int main() { }
