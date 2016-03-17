@@ -48,7 +48,82 @@
 
 ==============================================================================
 
-<!-- TODO: content -->
+## No cute intro, this is a serious talk
+
+![Rambo](img/rambo.jpg)
+
+====================
+
+## Outline
+
+- Logical operations
+- ...
+
+<!-- To present:
+    - implementation of tuple_cat
+    - different implementations of tuple (verify with Alisdair)
+    - in general, how to lift heterogeneous algorithms to constexpr
+    - compile-time hash table
+    - tuple pre-allocation
+ -->
+
+====================
+
+### Eager logical operations
+#### (Roland Bock)
+
+```cpp
+template <bool ...b>
+struct logical_and
+    : std::is_same<
+        logical_and<b...>,
+        logical_and<(b, true)...>
+    >
+{ };
+```
+
+====================
+
+### Short circuiting logical operations
+#### (Eric Fiselier)
+
+```cpp
+template <typename Condition, typename T = void>
+struct lazy_enable_if
+    : std::enable_if<Condition::value, T>
+{ };
+```
+
+----
+
+```cpp
+std::true_type expand(...);
+
+template <typename ...Bools>
+decltype(expand(typename lazy_enable_if<Bools, int>::type{}...))
+and_impl(int);
+
+template <typename ...Bools>
+std::false_type and_impl(...);
+
+template <typename ...Bools>
+struct logical_and
+    : decltype(and_impl<Bools...>(int{}))
+{ };
+```
+
+====================
+
+## Which one is faster?
+### No idea, must benchmark
+
+----
+
+### Seriously, _always benchmark_
+
+----
+
+<!-- TODO: Benchmark -->
 
 ====================
 
