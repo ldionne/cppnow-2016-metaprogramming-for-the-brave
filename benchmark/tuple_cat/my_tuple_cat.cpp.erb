@@ -1,0 +1,17 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+#include <boost/hana/tuple.hpp>
+
+#include "my_tuple_cat.hpp"
+namespace hana = boost::hana;
+
+
+int main() {
+    <% (0..n).each do |i| %>
+        auto t<%= i %> = hana::make_tuple(0, '1', 2.2, 3.3f, nullptr);
+    <% end %>
+
+    auto cat = ::tuple_cat(<%= (0..n).map { |i| "t#{i}" }.join(', ') %>);
+}

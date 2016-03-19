@@ -59,6 +59,7 @@ append_cxx_flag(HAS_STDCXX1Y_FLAG                  -std=c++1y)
 append_cxx_flag(HAS_PEDANTIC_FLAG                  -pedantic)
 append_cxx_flag(HAS_WNO_GNU_STRING_UDL             -Wno-gnu-string-literal-operator-template)
 append_cxx_flag(HAS_WNO_UNUSED_VARIABLE            -Wno-unused-variable)
+append_cxx_flag(HAS_FTEMPLATE_DEPTH                -ftemplate-depth=5000)
 
 
 #=============================================================================

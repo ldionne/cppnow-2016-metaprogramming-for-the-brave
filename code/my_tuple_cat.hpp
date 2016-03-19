@@ -4,8 +4,10 @@
 #ifndef MY_TUPLE_CAT_HPP
 #define MY_TUPLE_CAT_HPP
 
+#include <boost/hana/at.hpp>
+#include <boost/hana/tuple.hpp>
+
 #include <cstddef>
-#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -13,6 +15,19 @@
 //
 // Implementation adapted from Hana
 //
+
+template <typename Tuple>
+struct tuple_size;
+
+template <typename ...T>
+struct tuple_size<boost::hana::tuple<T...>> {
+    static constexpr auto value = sizeof...(T);
+};
+
+template <typename ...T>
+boost::hana::tuple<T&&...> forward_as_tuple(T&& ...t) {
+    return {static_cast<T&&>(t)...};
+}
 
 namespace mystd {
     template <typename InputIt, typename T>
@@ -64,8 +79,8 @@ struct flatten_indices {
 
     template <typename Tuples, std::size_t ...i>
     static constexpr auto apply(Tuples tuples, std::index_sequence<i...>) {
-        return std::make_tuple(
-            std::get<outer[i]>(std::get<inner[i]>(tuples))...
+        return boost::hana::make_tuple(
+            boost::hana::at_c<outer[i]>(boost::hana::at_c<inner[i]>(tuples))...
         );
     }
 };
@@ -73,10 +88,10 @@ struct flatten_indices {
 template <typename ...Tuples>
 constexpr auto tuple_cat(Tuples&& ...tuples) {
     using Indices = flatten_indices<
-        std::tuple_size<typename std::remove_reference<Tuples>::type>::value...
+        tuple_size<typename std::remove_reference<Tuples>::type>::value...
     >;
     return Indices::apply(
-        std::forward_as_tuple(std::forward<Tuples>(tuples)...),
+        ::forward_as_tuple(std::forward<Tuples>(tuples)...),
         std::make_index_sequence<Indices::flat_length>{}
     );
 }

@@ -188,39 +188,39 @@ void for_each(std::tuple<T...> const& tuple, F const& f) {
 ### `tuple_cat`
 
 ```cpp
-constexpr std::tuple<> tuple_cat() {
-    return std::tuple<>();
+constexpr boost::hana::tuple<> tuple_cat() {
+    return boost::hana::tuple<>();
 }
 
 template <typename Types, typename Is, typename Js>
 struct tuple_cat_impl;
 
 template <typename ...T, size_t ...I, size_t ...J>
-struct tuple_cat_impl<std::tuple<T...>,
+struct tuple_cat_impl<boost::hana::tuple<T...>,
                       std::index_sequence<I...>,
                       std::index_sequence<J...>>
 {
     template <typename Tuple0>
-    constexpr auto operator()(std::tuple<T...> t, Tuple0&& t0) {
-        return std::forward_as_tuple(std::forward<T>(std::get<I>(t))...,
-                                     std::get<J>(std::forward<Tuple0>(t0))...);
+    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0) {
+        return ::forward_as_tuple(std::forward<T>(boost::hana::at_c<I>(t))...,
+                                  boost::hana::at_c<J>(std::forward<Tuple0>(t0))...);
     }
 
     template <typename Tuple0, typename Tuple1, typename ...Tuples>
-    constexpr auto operator()(std::tuple<T...> t, Tuple0&& t0, Tuple1&& t1, Tuples&& ...tpls) {
+    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0, Tuple1&& t1, Tuples&& ...tpls) {
         using T0 = typename std::remove_reference<Tuple0>::type;
         using T1 = typename std::remove_reference<Tuple1>::type;
         return tuple_cat_impl<
-            std::tuple<
+            boost::hana::tuple<
                 T...,
-                typename apply_cv<Tuple0, typename std::tuple_element<J, T0>::type>::type&&...
+                typename apply_cv<Tuple0, typename tuple_element<J, T0>::type>::type&&...
             >,
-            std::make_index_sequence<sizeof ...(T) + std::tuple_size<T0>::value>,
-            std::make_index_sequence<std::tuple_size<T1>::value>
+            std::make_index_sequence<sizeof ...(T) + tuple_size<T0>::value>,
+            std::make_index_sequence<tuple_size<T1>::value>
         >{}(
-            std::forward_as_tuple(
-                std::forward<T>(std::get<I>(t))...,
-                std::get<J>(std::forward<Tuple0>(t0))...
+            ::forward_as_tuple(
+                std::forward<T>(boost::hana::at_c<I>(t))...,
+                boost::hana::at_c<J>(std::forward<Tuple0>(t0))...
             ),
             std::forward<Tuple1>(t1),
             std::forward<Tuples>(tpls)...
@@ -232,11 +232,11 @@ template <typename Tuple0, typename ...Tuples>
 constexpr auto tuple_cat(Tuple0&& t0, Tuples&& ...tpls) {
     using T0 = typename std::remove_reference<Tuple0>::type;
     return tuple_cat_impl<
-        std::tuple<>,
+        boost::hana::tuple<>,
         std::index_sequence<>,
-        std::make_index_sequence<std::tuple_size<T0>::value>
+        std::make_index_sequence<tuple_size<T0>::value>
     >{}(
-        std::tuple<>{},
+        boost::hana::tuple<>{},
         std::forward<Tuple0>(t0),
         std::forward<Tuples>(tpls)...
     );
@@ -272,8 +272,8 @@ struct flatten_indices {
 
     template <typename Tuples, std::size_t ...i>
     static constexpr auto apply(Tuples tuples, std::index_sequence<i...>) {
-        return std::make_tuple(
-            std::get<outer[i]>(std::get<inner[i]>(tuples))...
+        return boost::hana::make_tuple(
+            boost::hana::at_c<outer[i]>(boost::hana::at_c<inner[i]>(tuples))...
         );
     }
 };
@@ -281,10 +281,10 @@ struct flatten_indices {
 template <typename ...Tuples>
 constexpr auto tuple_cat(Tuples&& ...tuples) {
     using Indices = flatten_indices<
-        std::tuple_size<typename std::remove_reference<Tuples>::type>::value...
+        tuple_size<typename std::remove_reference<Tuples>::type>::value...
     >;
     return Indices::apply(
-        std::forward_as_tuple(std::forward<Tuples>(tuples)...),
+        ::forward_as_tuple(std::forward<Tuples>(tuples)...),
         std::make_index_sequence<Indices::flat_length>{}
     );
 }
@@ -292,7 +292,10 @@ constexpr auto tuple_cat(Tuples&& ...tuples) {
 
 ----
 
-<!-- TODO: Show the benchmarks -->
+<!-- .slide: data-state="haschart" -->
+<div class='benchmark-chart'>
+{"title":{"text":"tuple_cat"},"data":[{"key":"dataset.my_tuple_cat","values":[{"n":0,"time":0.10495949001051486,"size":16.848},{"n":10,"time":0.1721977210836485,"size":50.824},{"n":20,"time":0.25970316492021084,"size":93.632},{"n":30,"time":0.3155090189538896,"size":133.088},{"n":40,"time":0.40616536303423345,"size":177.232},{"n":50,"time":0.5061050989897922,"size":217.888},{"n":60,"time":0.5897400249959901,"size":267.328},{"n":70,"time":0.6893566360231489,"size":309.184},{"n":80,"time":0.8009700709953904,"size":355.728},{"n":90,"time":0.9364177630050108,"size":398.792},{"n":100,"time":1.0786939030513167,"size":446.544}]},{"key":"dataset.std_tuple_cat","values":[{"n":0,"time":0.11974298395216465,"size":15.944},{"n":10,"time":0.5000602030195296,"size":213.208},{"n":20,"time":1.6388250349555165,"size":866.384},{"n":30,"time":3.8604790170211345,"size":2122.304},{"n":40,"time":7.482939457055181,"size":4131.488},{"n":50,"time":14.919495346955955,"size":7039.848},{"n":60,"time":32.500950405956246,"size":10997.392},{"n":70,"time":29.762316133012064,"size":16162.368},{"n":80,"time":35.014632397913374,"size":22680.624},{"n":90,"time":88.30343898397405,"size":30698.04},{"n":100,"time":101.40765085897874,"size":40364.648}]}]}
+</div>
 
 ====================
 
@@ -355,7 +358,6 @@ http://github.com/ldionne
                     };
                 });
 
-                console.log(options);
                 Hana.initChart($(div), options);
             });
           };
