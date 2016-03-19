@@ -57,7 +57,7 @@
 ## Outline
 
 - Logical operations
-- ...
+- Algorithms on heterogeneous sequences
 
 <!-- To present:
     - implementation of tuple_cat
@@ -134,6 +134,168 @@ struct logical_and
 <div class='benchmark-chart'>
 {"title":{"text":"Logical and (heavy predicate)"},"data":[{"key":"dataset.lazy_logical_and-heavy","values":[{"n":0,"time":0.03457747306674719,"size":4.352},{"n":50,"time":0.057800009031780064,"size":4.352},{"n":100,"time":0.08856319810729474,"size":4.352},{"n":150,"time":0.1179371199104935,"size":4.352},{"n":200,"time":0.13878582103643566,"size":4.352},{"n":250,"time":0.1683621860574931,"size":4.352},{"n":300,"time":0.19501060992479324,"size":4.352},{"n":350,"time":0.21798726997803897,"size":4.352},{"n":400,"time":0.24994450306985527,"size":4.352},{"n":450,"time":0.273603969020769,"size":4.352},{"n":500,"time":0.30010824801865965,"size":4.352},{"n":550,"time":0.35356780095025897,"size":4.352},{"n":600,"time":0.380875819013454,"size":4.352},{"n":650,"time":0.4033903949894011,"size":4.352},{"n":700,"time":0.434545919066295,"size":4.352},{"n":750,"time":0.43916780001018196,"size":4.352},{"n":800,"time":0.46883344498928636,"size":4.352},{"n":850,"time":0.5100441209506243,"size":4.352},{"n":900,"time":0.5508588580414653,"size":4.352},{"n":950,"time":0.575399336987175,"size":4.352},{"n":1000,"time":0.5945708829676732,"size":4.352},{"n":1050,"time":0.6580227309605107,"size":4.352},{"n":1100,"time":0.6802825049962848,"size":4.352},{"n":1150,"time":0.6826359409606084,"size":4.352},{"n":1200,"time":0.7301543770590797,"size":4.352},{"n":1250,"time":0.7289095720043406,"size":4.352},{"n":1300,"time":0.7572243800386786,"size":4.352},{"n":1350,"time":0.7964663829188794,"size":4.352},{"n":1400,"time":0.812457061954774,"size":4.352},{"n":1450,"time":0.8407797589898109,"size":4.352},{"n":1500,"time":0.8872638319153339,"size":4.352},{"n":1550,"time":0.8895956169581041,"size":4.352},{"n":1600,"time":0.9267066849861294,"size":4.352},{"n":1650,"time":0.974082748987712,"size":4.352},{"n":1700,"time":0.9965054969070479,"size":4.352},{"n":1750,"time":0.9948154169833288,"size":4.352},{"n":1800,"time":1.0252971230074763,"size":4.352},{"n":1850,"time":1.059508775942959,"size":4.352},{"n":1900,"time":1.077089708065614,"size":4.352},{"n":1950,"time":1.1432388469111174,"size":4.352},{"n":2000,"time":1.1376166170230135,"size":4.352}]},{"key":"dataset.eager_logical_and-heavy","values":[{"n":0,"time":0.03668104798998684,"size":4.352},{"n":50,"time":0.08055901399347931,"size":4.352},{"n":100,"time":0.13982920197304338,"size":4.352},{"n":150,"time":0.1978315080050379,"size":4.352},{"n":200,"time":0.23189487005583942,"size":4.352},{"n":250,"time":0.2940798909403384,"size":4.352},{"n":300,"time":0.3496384380850941,"size":4.352},{"n":350,"time":0.4100802899338305,"size":4.352},{"n":400,"time":0.4618455220479518,"size":4.352},{"n":450,"time":0.5057177220005542,"size":4.352},{"n":500,"time":0.5556255569681525,"size":4.352},{"n":550,"time":0.6314529459923506,"size":4.352},{"n":600,"time":0.6752461560536176,"size":4.352},{"n":650,"time":0.7277212109183893,"size":4.352},{"n":700,"time":0.7797713779145852,"size":4.352},{"n":750,"time":0.8311718730255961,"size":4.352},{"n":800,"time":0.9040338929044083,"size":4.352},{"n":850,"time":0.9602879818994552,"size":4.352},{"n":900,"time":1.005287489038892,"size":4.352},{"n":950,"time":1.035785244894214,"size":4.352},{"n":1000,"time":1.128794931108132,"size":4.352},{"n":1050,"time":1.1698589948937297,"size":4.352},{"n":1100,"time":1.2522548889974132,"size":4.352},{"n":1150,"time":1.2796355210011825,"size":4.352},{"n":1200,"time":1.3467423389665782,"size":4.352},{"n":1250,"time":1.38959320995491,"size":4.352},{"n":1300,"time":1.4345248460303992,"size":4.352},{"n":1350,"time":1.5017189719947055,"size":4.352},{"n":1400,"time":1.5360283559421077,"size":4.352},{"n":1450,"time":1.5757863090839237,"size":4.352},{"n":1500,"time":1.6500117970863357,"size":4.352},{"n":1550,"time":1.671914879931137,"size":4.352},{"n":1600,"time":1.7348869260167703,"size":4.352},{"n":1650,"time":2.1110183600103483,"size":4.352},{"n":1700,"time":1.9976689879549667,"size":4.352},{"n":1750,"time":2.0250211249804124,"size":4.352},{"n":1800,"time":2.038336990051903,"size":4.352},{"n":1850,"time":2.02566038898658,"size":4.352},{"n":1900,"time":2.0987599489744753,"size":4.352},{"n":1950,"time":2.121139583992772,"size":4.352},{"n":2000,"time":2.1952559739584103,"size":4.352}]}]}
 </div>
+
+====================
+
+### Algorithms on heterogeneous sequences
+
+====================
+
+### `transform`
+
+```cpp
+template <typename ...T, typename F, std::size_t ...i>
+auto transform_impl(std::tuple<T...> const& tuple, F const& f,
+                    std::index_sequence<i...>)
+{
+    return std::make_tuple(f(std::get<i>(tuple))...);
+}
+
+template <typename ...T, typename F>
+auto transform(std::tuple<T...> const& tuple, F const& f) {
+    return transform_impl(tuple, f,
+                std::make_index_sequence<sizeof...(T)>{});
+}
+```
+
+====================
+
+### `for_each`
+
+```cpp
+template <typename ...T, typename F, std::size_t ...i>
+void for_each_impl(std::tuple<T...> const& tuple, F const& f,
+                   std::index_sequence<i...>)
+{
+    int expand[] = {0, (f(std::get<i>(tuple)), void(), 0)...};
+    (void)expand;
+}
+
+template <typename ...T, typename F>
+void for_each(std::tuple<T...> const& tuple, F const& f) {
+    for_each_impl(tuple, f, std::make_index_sequence<sizeof...(T)>{});
+}
+```
+
+====================
+
+## Easy so far
+
+====================
+
+### `tuple_cat`
+
+```cpp
+constexpr std::tuple<> tuple_cat() {
+    return std::tuple<>();
+}
+
+template <typename Types, typename Is, typename Js>
+struct tuple_cat_impl;
+
+template <typename ...T, size_t ...I, size_t ...J>
+struct tuple_cat_impl<std::tuple<T...>,
+                      std::index_sequence<I...>,
+                      std::index_sequence<J...>>
+{
+    template <typename Tuple0>
+    constexpr auto operator()(std::tuple<T...> t, Tuple0&& t0) {
+        return std::forward_as_tuple(std::forward<T>(std::get<I>(t))...,
+                                     std::get<J>(std::forward<Tuple0>(t0))...);
+    }
+
+    template <typename Tuple0, typename Tuple1, typename ...Tuples>
+    constexpr auto operator()(std::tuple<T...> t, Tuple0&& t0, Tuple1&& t1, Tuples&& ...tpls) {
+        using T0 = typename std::remove_reference<Tuple0>::type;
+        using T1 = typename std::remove_reference<Tuple1>::type;
+        return tuple_cat_impl<
+            std::tuple<
+                T...,
+                typename apply_cv<Tuple0, typename std::tuple_element<J, T0>::type>::type&&...
+            >,
+            std::make_index_sequence<sizeof ...(T) + std::tuple_size<T0>::value>,
+            std::make_index_sequence<std::tuple_size<T1>::value>
+        >{}(
+            std::forward_as_tuple(
+                std::forward<T>(std::get<I>(t))...,
+                std::get<J>(std::forward<Tuple0>(t0))...
+            ),
+            std::forward<Tuple1>(t1),
+            std::forward<Tuples>(tpls)...
+        );
+    }
+};
+
+template <typename Tuple0, typename ...Tuples>
+constexpr auto tuple_cat(Tuple0&& t0, Tuples&& ...tpls) {
+    using T0 = typename std::remove_reference<Tuple0>::type;
+    return tuple_cat_impl<
+        std::tuple<>,
+        std::index_sequence<>,
+        std::make_index_sequence<std::tuple_size<T0>::value>
+    >{}(
+        std::tuple<>{},
+        std::forward<Tuple0>(t0),
+        std::forward<Tuples>(tpls)...
+    );
+}
+```
+
+----
+
+### This is wrong!
+
+----
+
+### `tuple_cat`, take two
+
+```cpp
+template <std::size_t ...Lengths>
+struct flatten_indices {
+    static constexpr std::size_t lengths[] = {Lengths..., 0};
+    static constexpr auto flat_length =
+        mystd::accumulate(lengths, lengths + sizeof...(Lengths), 0);
+
+    template <bool Inner>
+    static constexpr auto compute() {
+        mystd::array<std::size_t, flat_length> indices{};
+        for (std::size_t index = 0, i = 0; i < sizeof...(Lengths); ++i)
+            for (std::size_t j = 0; j < lengths[i]; ++j, ++index)
+                indices[index] = (Inner ? i : j);
+        return indices;
+    }
+
+    static constexpr auto inner = compute<true>();
+    static constexpr auto outer = compute<false>();
+
+    template <typename Tuples, std::size_t ...i>
+    static constexpr auto apply(Tuples tuples, std::index_sequence<i...>) {
+        return std::make_tuple(
+            std::get<outer[i]>(std::get<inner[i]>(tuples))...
+        );
+    }
+};
+
+template <typename ...Tuples>
+constexpr auto tuple_cat(Tuples&& ...tuples) {
+    using Indices = flatten_indices<
+        std::tuple_size<typename std::remove_reference<Tuples>::type>::value...
+    >;
+    return Indices::apply(
+        std::forward_as_tuple(std::forward<Tuples>(tuples)...),
+        std::make_index_sequence<Indices::flat_length>{}
+    );
+}
+```
+
+----
+
+<!-- TODO: Show the benchmarks -->
+
+====================
+
+### The idea
+Perform the computation on indices, and then involve the original sequence
 
 ====================
 
