@@ -58,13 +58,12 @@
 
 - Logical operations
 - Algorithms on heterogeneous sequences
+- Tuples
+- Miscellaneous things to avoid
 
 <!-- To present:
-    - implementation of tuple_cat
-    - different implementations of tuple (verify with Alisdair)
-    - in general, how to lift heterogeneous algorithms to constexpr
     - compile-time hash table
-    - tuple pre-allocation
+    - problems with long symbols?
  -->
 
 ====================
@@ -301,6 +300,125 @@ constexpr auto tuple_cat(Tuples&& ...tuples) {
 
 ### The idea
 Perform the computation on indices, and then involve the original sequence
+
+====================
+
+### Another one
+
+====================
+
+### `filter` (naive)
+
+```cpp
+#error TODO
+
+template <typename ...T, typename Predicate>
+constexpr auto filter(std::tuple<T...> const& xs, Predicate const& pred) {
+    return filter_impl(xs, pred, std::make_index_sequence<sizeof...(T)>{});
+}
+```
+
+----
+
+### `filter` (good)
+
+```cpp
+
+```
+
+----
+
+<!-- .slide: data-state="haschart" -->
+<div class='benchmark-chart'>
+<!-- TODO: do this benchmark -->
+</div>
+
+====================
+
+### Let's now dive into tuples
+
+----
+
+### Classic multiple inheritance
+
+
+
+----
+
+### Aligned storage (experimental)
+
+
+
+
+Note:
+Alisdair will present something similar in his presentation, so I won't go
+into the details here.
+
+====================
+
+### Benefits of aligned storage
+
+----
+
+### Some algorithms are killer
+
+
+
+----
+
+### Can optimize empty types easily
+
+<!-- TODO -->
+
+----
+
+### Easy to optimize for the compiler
+
+<!-- TODO: Show generated assembly of both techniques -->
+
+----
+
+### Possibility of pre-allocating storage
+
+<!-- TODO: Experiment with pre-allocating algorithms -->
+
+====================
+
+### Downsides of aligned storage
+
+----
+
+### Can't be constexpr (in-place `new`)
+
+<!-- TODO: Show small example -->
+
+----
+
+### Slower than multiple inheritance
+
+<!-- TODO: Show benchmark -->
+
+
+Note:
+This is surprising, as we would expect pure constexpr to be faster than
+multiple inheritance. It appears that constexpr evaluation is far from free.
+Again, always benchmark!
+
+====================
+
+### Miscellaneous things to avoid
+
+====================
+
+### Long symbol names
+
+<!-- TODO: explain the issue and show how it can be eliminated using anonymous namespaces or LTO -->
+
+====================
+
+### Excessive use of overloading
+
+<!-- TODO: Explain that overloading is slow, and show benchmark of how it scales w.r.t. number of arguments -->
 
 ====================
 

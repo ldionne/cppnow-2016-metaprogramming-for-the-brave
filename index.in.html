@@ -58,14 +58,9 @@
 
 - Logical operations
 - Algorithms on heterogeneous sequences
-
-<!-- To present:
-    - implementation of tuple_cat
-    - different implementations of tuple (verify with Alisdair)
-    - in general, how to lift heterogeneous algorithms to constexpr
-    - compile-time hash table
-    - tuple pre-allocation
- -->
+- Tuples
+- Miscellaneous things to avoid
+- Metabench
 
 ====================
 
@@ -155,6 +150,122 @@
 
 ### The idea
 Perform the computation on indices, and then involve the original sequence
+
+====================
+
+### Another one
+
+====================
+
+### `filter` (naive)
+
+%%filter.naive%%
+
+----
+
+### `filter` (good)
+
+%%filter.good%%
+
+----
+
+<!-- .slide: data-state="haschart" -->
+<div class='benchmark-chart'>
+<!-- TODO: do this benchmark -->
+</div>
+
+====================
+
+### Let's now dive into tuples
+
+----
+
+### Classic multiple inheritance
+
+%%tuple.multiple_inheritance%%
+
+----
+
+### Aligned storage (experimental)
+
+%%tuple.aligned_storage%%
+
+
+Note:
+Alisdair will present something similar in his presentation, so I won't go
+into the details here.
+
+====================
+
+### Benefits of aligned storage
+
+----
+
+### Some algorithms are killer
+
+%%tuple.aligned_storage.scan%%
+
+----
+
+### Can optimize empty types easily
+
+<!-- TODO -->
+
+----
+
+### Easy to optimize for the compiler
+
+<!-- TODO: Show generated assembly of both techniques -->
+
+----
+
+### Possibility of pre-allocating storage
+
+<!-- TODO: Experiment with pre-allocating algorithms -->
+
+====================
+
+### Downsides of aligned storage
+
+----
+
+### Can't be constexpr (in-place `new`)
+
+<!-- TODO: Show small example -->
+
+----
+
+### Slower than multiple inheritance
+
+<!-- TODO: Show benchmark -->
+
+
+Note:
+This is surprising, as we would expect pure constexpr to be faster than
+multiple inheritance. It appears that constexpr evaluation is far from free.
+Again, always benchmark!
+
+====================
+
+### Miscellaneous things to avoid
+
+====================
+
+### Long symbol names
+
+<!-- TODO: explain the issue and show how it can be eliminated using anonymous namespaces or LTO -->
+
+====================
+
+### Excessive use of overloading
+
+<!-- TODO: Explain that overloading is slow, and show benchmark of how it scales w.r.t. number of arguments -->
+
+====================
+
+## Metabench
+
+<!-- TODO: Explain what is Metabench, and quickly how to use it. -->
 
 ====================
 
