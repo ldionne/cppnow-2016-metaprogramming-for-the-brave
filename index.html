@@ -60,54 +60,21 @@
 - Algorithms on heterogeneous sequences
 - Tuples
 - Miscellaneous things to avoid
-
-<!-- To present:
-    - compile-time hash table
-    - problems with long symbols?
- -->
+- Metabench
 
 ====================
 
 ### Eager logical operations
 #### (Roland Bock)
 
-```cpp
-template <bool ...> struct bools;
-
-template <typename ...Bools>
-struct logical_and
-    : std::is_same<
-        bools<Bools::value...>,
-        bools<(Bools::value, true)...>
-    >
-{ };
-```
+<pre><code class="sample" sample="code/eager_logical_and.hpp#eager_logical_and"></code></pre>
 
 ====================
 
 ### Short circuiting logical operations
 #### (Eric Fiselier)
 
-```cpp
-template <typename Condition, typename T = void>
-struct lazy_enable_if
-    : std::enable_if<Condition::value, T>
-{ };
-
-std::true_type expand(...);
-
-template <typename ...Bools>
-decltype(expand(typename lazy_enable_if<Bools, int>::type{}...))
-and_impl(int);
-
-template <typename ...Bools>
-std::false_type and_impl(...);
-
-template <typename ...Bools>
-struct logical_and
-    : decltype(and_impl<Bools...>(int{}))
-{ };
-```
+<pre><code class="sample" sample="code/lazy_logical_and.hpp#lazy_logical_and"></code></pre>
 
 ====================
 
@@ -144,39 +111,13 @@ struct logical_and
 
 ### `transform`
 
-```cpp
-template <typename ...T, typename F, std::size_t ...i>
-auto transform_impl(std::tuple<T...> const& tuple, F const& f,
-                    std::index_sequence<i...>)
-{
-    return std::make_tuple(f(std::get<i>(tuple))...);
-}
-
-template <typename ...T, typename F>
-auto transform(std::tuple<T...> const& tuple, F const& f) {
-    return transform_impl(tuple, f,
-                std::make_index_sequence<sizeof...(T)>{});
-}
-```
+<pre><code class="sample" sample="code/algo.transform.cpp#transform"></code></pre>
 
 ====================
 
 ### `for_each`
 
-```cpp
-template <typename ...T, typename F, std::size_t ...i>
-void for_each_impl(std::tuple<T...> const& tuple, F const& f,
-                   std::index_sequence<i...>)
-{
-    int expand[] = {0, (f(std::get<i>(tuple)), void(), 0)...};
-    (void)expand;
-}
-
-template <typename ...T, typename F>
-void for_each(std::tuple<T...> const& tuple, F const& f) {
-    for_each_impl(tuple, f, std::make_index_sequence<sizeof...(T)>{});
-}
-```
+<pre><code class="sample" sample="code/algo.for_each.cpp#for_each"></code></pre>
 
 ====================
 
@@ -186,61 +127,7 @@ void for_each(std::tuple<T...> const& tuple, F const& f) {
 
 ### `tuple_cat`
 
-```cpp
-constexpr boost::hana::tuple<> tuple_cat() {
-    return boost::hana::tuple<>();
-}
-
-template <typename Types, typename Is, typename Js>
-struct tuple_cat_impl;
-
-template <typename ...T, size_t ...I, size_t ...J>
-struct tuple_cat_impl<boost::hana::tuple<T...>,
-                      std::index_sequence<I...>,
-                      std::index_sequence<J...>>
-{
-    template <typename Tuple0>
-    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0) {
-        return ::forward_as_tuple(std::forward<T>(boost::hana::at_c<I>(t))...,
-                                  boost::hana::at_c<J>(std::forward<Tuple0>(t0))...);
-    }
-
-    template <typename Tuple0, typename Tuple1, typename ...Tuples>
-    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0, Tuple1&& t1, Tuples&& ...tpls) {
-        using T0 = typename std::remove_reference<Tuple0>::type;
-        using T1 = typename std::remove_reference<Tuple1>::type;
-        return tuple_cat_impl<
-            boost::hana::tuple<
-                T...,
-                typename apply_cv<Tuple0, typename tuple_element<J, T0>::type>::type&&...
-            >,
-            std::make_index_sequence<sizeof ...(T) + tuple_size<T0>::value>,
-            std::make_index_sequence<tuple_size<T1>::value>
-        >{}(
-            ::forward_as_tuple(
-                std::forward<T>(boost::hana::at_c<I>(t))...,
-                boost::hana::at_c<J>(std::forward<Tuple0>(t0))...
-            ),
-            std::forward<Tuple1>(t1),
-            std::forward<Tuples>(tpls)...
-        );
-    }
-};
-
-template <typename Tuple0, typename ...Tuples>
-constexpr auto tuple_cat(Tuple0&& t0, Tuples&& ...tpls) {
-    using T0 = typename std::remove_reference<Tuple0>::type;
-    return tuple_cat_impl<
-        boost::hana::tuple<>,
-        std::index_sequence<>,
-        std::make_index_sequence<tuple_size<T0>::value>
-    >{}(
-        boost::hana::tuple<>{},
-        std::forward<Tuple0>(t0),
-        std::forward<Tuples>(tpls)...
-    );
-}
-```
+<pre><code class="sample" sample="code/std_tuple_cat.hpp#std.tuple_cat"></code></pre>
 
 ----
 
@@ -250,44 +137,7 @@ constexpr auto tuple_cat(Tuple0&& t0, Tuples&& ...tpls) {
 
 ### `tuple_cat`, take two
 
-```cpp
-template <std::size_t ...Lengths>
-struct flatten_indices {
-    static constexpr std::size_t lengths[] = {Lengths..., 0};
-    static constexpr auto flat_length =
-        mystd::accumulate(lengths, lengths + sizeof...(Lengths), 0);
-
-    template <bool Inner>
-    static constexpr auto compute() {
-        mystd::array<std::size_t, flat_length> indices{};
-        for (std::size_t index = 0, i = 0; i < sizeof...(Lengths); ++i)
-            for (std::size_t j = 0; j < lengths[i]; ++j, ++index)
-                indices[index] = (Inner ? i : j);
-        return indices;
-    }
-
-    static constexpr auto inner = compute<true>();
-    static constexpr auto outer = compute<false>();
-
-    template <typename Tuples, std::size_t ...i>
-    static constexpr auto apply(Tuples tuples, std::index_sequence<i...>) {
-        return boost::hana::make_tuple(
-            boost::hana::at_c<outer[i]>(boost::hana::at_c<inner[i]>(tuples))...
-        );
-    }
-};
-
-template <typename ...Tuples>
-constexpr auto tuple_cat(Tuples&& ...tuples) {
-    using Indices = flatten_indices<
-        tuple_size<typename std::remove_reference<Tuples>::type>::value...
-    >;
-    return Indices::apply(
-        ::forward_as_tuple(std::forward<Tuples>(tuples)...),
-        std::make_index_sequence<Indices::flat_length>{}
-    );
-}
-```
+<pre><code class="sample" sample="code/my_tuple_cat.hpp#my.tuple_cat"></code></pre>
 
 ----
 
@@ -309,22 +159,13 @@ Perform the computation on indices, and then involve the original sequence
 
 ### `filter` (naive)
 
-```cpp
-#error TODO
-
-template <typename ...T, typename Predicate>
-constexpr auto filter(std::tuple<T...> const& xs, Predicate const& pred) {
-    return filter_impl(xs, pred, std::make_index_sequence<sizeof...(T)>{});
-}
-```
+<pre><code class="sample" sample="code/filter.naive.hpp#filter.naive"></code></pre>
 
 ----
 
 ### `filter` (good)
 
-```cpp
-
-```
+<pre><code class="sample" sample="code/filter.good.hpp#filter.good"></code></pre>
 
 ----
 
@@ -341,13 +182,13 @@ constexpr auto filter(std::tuple<T...> const& xs, Predicate const& pred) {
 
 ### Classic multiple inheritance
 
-
+<!-- TODO: tuple.multiple_inheritance example -->
 
 ----
 
 ### Aligned storage (experimental)
 
-
+<!-- TODO: tuple.aligned_storage example -->
 
 
 Note:
@@ -362,7 +203,7 @@ into the details here.
 
 ### Some algorithms are killer
 
-
+<!-- TODO: tuple.aligned_storage.scan example -->
 
 ----
 
@@ -422,6 +263,12 @@ Again, always benchmark!
 
 ====================
 
+## Metabench
+
+<!-- TODO: Explain what is Metabench, and quickly how to use it. -->
+
+====================
+
 # Thank you
 
 <span class="fragment fade-in">
@@ -450,8 +297,8 @@ http://github.com/ldionne
                     { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                     { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                     { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
-                    { src: 'plugin/math/math.js', async: true }
-                    // , { src: 'plugin/remotes/remotes.js', async: true }
+                    { src: 'plugin/math/math.js', async: true },
+                    { src: 'plugin/sampler/sampler.js' }
                 ]
             });
         </script>
@@ -496,4 +343,3 @@ http://github.com/ldionne
         </script>
     </body>
 </html>
-

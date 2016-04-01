@@ -16,14 +16,6 @@ grunt serve &
 
 and then connect to `localhost:8000` to view locally.
 
-## Notes to my future self
-`index.html` is generated from `index.in.html`. To generate `index.html`,
-```sh
-mkdir build
-cd build
-cmake ..
-make index
-```
 
 <!-- Links -->
 [C++Now]: http://cppnow.org

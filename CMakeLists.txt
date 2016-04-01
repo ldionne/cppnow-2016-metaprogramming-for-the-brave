@@ -63,27 +63,18 @@ append_cxx_flag(HAS_FTEMPLATE_DEPTH                -ftemplate-depth=5000)
 
 
 #=============================================================================
-# Setup the `sampler` executable
-#=============================================================================
-include_directories(sampler)
-add_executable(sampler sampler/sampler.cpp)
-
-
-#=============================================================================
 # Setup code samples
 #=============================================================================
 enable_testing()
 add_custom_target(samples)
 
-file(GLOB CODE_SAMPLES code/*.cpp code/*.hpp)
+file(GLOB CODE_SAMPLES code/*.cpp)
 foreach(_file IN LISTS CODE_SAMPLES)
-    if (${_file} MATCHES "\\.cpp")
-        file(RELATIVE_PATH _target ${CMAKE_CURRENT_SOURCE_DIR}/code ${_file})
-        string(REPLACE ".cpp" "" _target "${_target}")
-        add_executable(sample.${_target} "${_file}")
-        add_dependencies(samples sample.${_target})
-        add_test(sample.${_target} sample.${_target})
-    endif()
+    file(RELATIVE_PATH _target ${CMAKE_CURRENT_SOURCE_DIR}/code ${_file})
+    string(REPLACE ".cpp" "" _target "${_target}")
+    add_executable(sample.${_target} "${_file}")
+    add_dependencies(samples sample.${_target})
+    add_test(sample.${_target} sample.${_target})
 endforeach()
 
 add_custom_target(check ALL
@@ -96,16 +87,3 @@ add_custom_target(check ALL
 # Add benchmarks
 #=============================================================================
 add_subdirectory(benchmark)
-
-#=============================================================================
-# Setup the index.html target
-#=============================================================================
-add_custom_command(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/index.html
-    COMMAND sampler ${CMAKE_CURRENT_SOURCE_DIR}/index.in.html
-                    ${CMAKE_CURRENT_SOURCE_DIR}/index.html
-                    ${CODE_SAMPLES}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/index.in.html samples sampler
-    COMMENT "Generating index.html from index.in.html and source code samples."
-)
-
-add_custom_target(index ALL DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/index.html)
