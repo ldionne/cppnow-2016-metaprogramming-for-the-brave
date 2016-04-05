@@ -7,6 +7,7 @@ metabench_add_benchmark(benchmark.logical_and-light
     DATASETS dataset.lazy_logical_and-light
              dataset.eager_logical_and-light
     CHART light/chart.json
+    FILENAME light/index
 )
 
 # The same benchmark as above, but where evaluating the booleans is heavy.
@@ -16,4 +17,5 @@ metabench_add_benchmark(benchmark.logical_and-heavy
     DATASETS dataset.lazy_logical_and-heavy
              dataset.eager_logical_and-heavy
     CHART heavy/chart.json
+    FILENAME heavy/index
 )

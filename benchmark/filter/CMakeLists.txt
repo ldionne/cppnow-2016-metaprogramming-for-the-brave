@@ -7,4 +7,5 @@ metabench_add_benchmark(benchmark.filter
     DATASETS dataset.filter.naive
              dataset.filter.good
     CHART chart.json
+    FILENAME index
 )

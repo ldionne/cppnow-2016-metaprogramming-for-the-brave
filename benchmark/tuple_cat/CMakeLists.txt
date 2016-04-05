@@ -7,4 +7,5 @@ metabench_add_benchmark(benchmark.tuple_cat
     DATASETS dataset.my_tuple_cat
              dataset.std_tuple_cat
     CHART chart.json
+    FILENAME index
 )
