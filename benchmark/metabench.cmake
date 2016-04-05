@@ -153,7 +153,7 @@ function(metabench_add_dataset target path_to_template range)
     )
 endfunction()
 
-# metabench_add_benchmark(target [ALL] DATASETS dataset1 [dataset2 [dataset3 [...]]] [CHART path/to/json] [FILENAME name])
+# metabench_add_benchmark(target [ALL] DATASETS dataset1 [dataset2 [dataset3 [...]]] [CHART path/to/json] [OUTPUT path/to/file])
 #
 #   Creates a target for running a compile-time benchmark. After issuing this
 #   command, running the target named `target` will cause each `dataset` to be
@@ -183,15 +183,19 @@ endfunction()
 #       The path to a JSON file containing data for rendering the chart in the
 #       format specified by NVD3.
 #
-#   [FILENAME name]:
-#       A name used for the output files. The JSON and HTML files generated will
-#       be named ${name}.json and ${name}.html, respectively.
-#       Defaults to `target`.
+#   [OUTPUT path/to/file]:
+#       A path pattern identifying where the output files should be placed.
+#       More specifically, the JSON and HTML files generated will be named
+#       `path/to/file.json` and `path/to/file.html`, respectively. If a
+#       relative path is used, the path will be considered as being relative
+#       to the current CMake binary directory. This defaults to `target`, so
+#       that the output files will be `target.json` and `target.html` in the
+#       current CMake binary directory.
 #
 # [1]: http://nvd3.org/
 function(metabench_add_benchmark target)
     set(options ALL)
-    set(one_value_args CHART FILENAME)
+    set(one_value_args CHART OUTPUT)
     set(multi_value_args DATASETS)
     cmake_parse_arguments(ARGS "${options}" "${one_value_args}" "${multi_value_args}" ${ARGN})
 
@@ -203,8 +207,12 @@ function(metabench_add_benchmark target)
         set(ARGS_CHART "${CMAKE_CURRENT_SOURCE_DIR}/${ARGS_CHART}")
     endif()
 
-    if (NOT ARGS_FILENAME)
-        set(ARGS_FILENAME ${target})
+    if (NOT ARGS_OUTPUT)
+        set(ARGS_OUTPUT ${target})
+    endif()
+
+    if(NOT IS_ABSOLUTE ${ARGS_OUTPUT})
+        set(ARGS_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${ARGS_OUTPUT}")
     endif()
 
     set(data)
@@ -213,22 +221,21 @@ function(metabench_add_benchmark target)
         list(APPEND data "${output_dir}/${dataset}.json")
     endforeach()
 
-    set(json_path "${CMAKE_CURRENT_BINARY_DIR}/${ARGS_FILENAME}.json")
-    set(html_path "${CMAKE_CURRENT_BINARY_DIR}/${ARGS_FILENAME}.html")
     add_custom_command(
-        OUTPUT "${json_path}" "${html_path}"
-        COMMAND ${RUBY_EXECUTABLE} -r erb -r json
+        OUTPUT "${ARGS_OUTPUT}.json" "${ARGS_OUTPUT}.html"
+        COMMAND ${RUBY_EXECUTABLE} -r erb -r json -r fileutils
             -e "chart = {}"
             -e "chart = JSON.parse(IO.read('${ARGS_CHART}')) if File.file?('${ARGS_CHART}')"
             -e "chart[:data] = '${data}'.split(';').map { |datum| JSON.parse(IO.read(datum)) }"
             -e "html = ERB.new(File.read('${CHART_HTML_ERB_PATH}')).result(binding)"
-            -e "IO.write('${json_path}', chart[:data].to_json)"
-            -e "IO.write('${html_path}', html)"
+            -e "FileUtils.mkdir_p(File.dirname('${ARGS_OUTPUT}'))"
+            -e "IO.write('${ARGS_OUTPUT}.json', chart[:data].to_json)"
+            -e "IO.write('${ARGS_OUTPUT}.html', html)"
         DEPENDS ${data} "${ARGS_CHART}"
         VERBATIM
     )
 
-    set(dependencies "${json_path}" "${html_path}")
+    set(dependencies "${ARGS_OUTPUT}.json" "${ARGS_OUTPUT}.html")
     if (${ARGS_ALL})
         add_custom_target(${target} ALL DEPENDS ${dependencies})
     else()
