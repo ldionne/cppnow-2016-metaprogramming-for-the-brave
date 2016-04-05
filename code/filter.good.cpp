@@ -3,6 +3,6 @@
 
 #include "filter.good.hpp"
 
-#error TODO
+#warning TODO
 
 int main() { }

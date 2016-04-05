@@ -3,6 +3,6 @@
 
 #include "filter.naive.hpp"
 
-#error TODO
+#warning TODO
 
 int main() { }

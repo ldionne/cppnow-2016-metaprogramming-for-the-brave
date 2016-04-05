@@ -5,12 +5,12 @@
 #define FILTER_NAIVE_HPP
 
 // sample(filter.naive)
-#error TODO
+#warning TODO
 
-template <typename ...T, typename Predicate>
-constexpr auto filter(std::tuple<T...> const& xs, Predicate const& pred) {
-    return filter_impl(xs, pred, std::make_index_sequence<sizeof...(T)>{});
-}
+// template <typename ...T, typename Predicate>
+// constexpr auto filter(std::tuple<T...> const& xs, Predicate const& pred) {
+//     return filter_impl(xs, pred, std::make_index_sequence<sizeof...(T)>{});
+// }
 // end-sample
 
 #endif
