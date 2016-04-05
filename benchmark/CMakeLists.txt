@@ -13,8 +13,9 @@ metabench_add_dataset(dataset.filter.good  filter/good.cpp.erb  "(0..100).step(1
 metabench_add_benchmark(benchmark.filter
     DATASETS dataset.filter.naive
              dataset.filter.good
-    CHART filter/chart.json
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/filter/index
+    TITLE "filter"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/filter/index.html
+
 )
 
 # light_logical_and
@@ -23,8 +24,8 @@ metabench_add_dataset(dataset.light_logical_and.eager light_logical_and/eager.cp
 metabench_add_benchmark(benchmark.light_logical_and
     DATASETS dataset.light_logical_and.lazy
              dataset.light_logical_and.eager
-    CHART light_logical_and/chart.json
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/light_logical_and/index
+    TITLE "Logical and (light predicate)"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/light_logical_and/index.html
 )
 
 # heavy_logical_and
@@ -33,18 +34,18 @@ metabench_add_dataset(dataset.heavy_logical_and.eager heavy_logical_and/eager.cp
 metabench_add_benchmark(benchmark.heavy_logical_and
     DATASETS dataset.heavy_logical_and.lazy
              dataset.heavy_logical_and.eager
-    CHART heavy_logical_and/chart.json
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/heavy_logical_and/index
+    TITLE "Logical and (heavy predicate)"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/heavy_logical_and/index.html
 )
 
 # tuple_cat
-metabench_add_dataset(dataset.my_tuple_cat tuple_cat/my_tuple_cat.cpp.erb "(0..100).step(10)")
-metabench_add_dataset(dataset.std_tuple_cat tuple_cat/std_tuple_cat.cpp.erb "(0..100).step(10)")
+metabench_add_dataset(dataset.my_tuple_cat tuple_cat/my_tuple_cat.cpp.erb "(0..70).step(10)")
+metabench_add_dataset(dataset.std_tuple_cat tuple_cat/std_tuple_cat.cpp.erb "(0..70).step(10)")
 metabench_add_benchmark(benchmark.tuple_cat
     DATASETS dataset.my_tuple_cat
              dataset.std_tuple_cat
-    CHART tuple_cat/chart.json
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tuple_cat/index
+    TITLE "tuple_cat"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/tuple_cat/index.html
 )
 
 add_custom_target(benchmarks
