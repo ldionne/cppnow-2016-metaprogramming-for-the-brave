@@ -14,11 +14,12 @@ ExternalProject_Add(Hana
     GIT_REPOSITORY https://github.com/ldionne/hana
     GIT_TAG origin/develop
     TIMEOUT 10
-    CMAKE_ARGS -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+    CONFIGURE_COMMAND "" # Disable configure step
     BUILD_COMMAND ""   # Disable build step
     INSTALL_COMMAND "" # Disable install step
     TEST_COMMAND ""    # Disable test step
+    UPDATE_COMMAND ""    # Disable source work-tree update
 )
 ExternalProject_Get_Property(Hana SOURCE_DIR)
 include_directories(${SOURCE_DIR}/include)
@@ -27,11 +28,12 @@ ExternalProject_Add(Meta
     GIT_REPOSITORY https://github.com/ericniebler/meta
     GIT_TAG origin/master
     TIMEOUT 10
-    CMAKE_ARGS -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} -DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+    CONFIGURE_COMMAND "" # Disable configure step
     BUILD_COMMAND ""   # Disable build step
     INSTALL_COMMAND "" # Disable install step
     TEST_COMMAND ""    # Disable test step
+    UPDATE_COMMAND ""    # Disable source work-tree update
 )
 ExternalProject_Get_Property(Meta SOURCE_DIR)
 include_directories(${SOURCE_DIR}/include)
