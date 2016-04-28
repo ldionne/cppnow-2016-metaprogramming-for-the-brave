@@ -10,7 +10,7 @@ find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 include(ExternalProject)
-ExternalProject_Add(Hana EXCLUDE_FROM_ALL 1
+ExternalProject_Add(install-Hana EXCLUDE_FROM_ALL 1
     URL https://github.com/boostorg/hana/archive/develop.zip
     TIMEOUT 120
     PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dependencies/hana"
@@ -20,8 +20,10 @@ ExternalProject_Add(Hana EXCLUDE_FROM_ALL 1
     TEST_COMMAND ""      # Disable test step
     UPDATE_COMMAND ""    # Disable source work-tree update
 )
-ExternalProject_Get_Property(Hana SOURCE_DIR)
+ExternalProject_Get_Property(install-Hana SOURCE_DIR)
 include_directories(${SOURCE_DIR}/include)
+
+add_custom_target(install-dependencies DEPENDS install-Hana)
 
 
 #=============================================================================

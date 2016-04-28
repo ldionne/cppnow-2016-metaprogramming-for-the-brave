@@ -14,8 +14,18 @@ npm install
 grunt serve &
 ```
 
-and then connect to `localhost:8000` to view locally.
+and then connect to `localhost:8000` to view locally. To build the code samples
+and benchmarks, issue the following from the root of the repository
 
+```sh
+mkdir build
+cd build
+cmake ..
+cmake --build . --target install-dependencies # install required dependencies
+cmake --build . --target samples # build the code samples
+cmake --build . --target check # build and test the code samples
+cmake --build . --target benchmarks # generate the benchmarks
+```
 
 <!-- Links -->
 [C++Now]: http://cppnow.org
