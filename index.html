@@ -56,27 +56,36 @@
 
 ## Outline
 
-- Logical operations
-- Algorithms on heterogeneous sequences
-- Tuples
-- Miscellaneous things to avoid
-- Metabench
+- Optimizing for compile-time performance
+- Optimizing for runtime performance
+- Connecting both worlds
+- Miscellanea
 
 ====================
 
-### Eager logical operations
+### Tip 1: Prefer variadic expansion to recursion
+
+----
+
+### Example: logical and
+
+<pre><code class="sample" sample="code/logical_and/recursive.hpp#main"></code></pre>
+
+----
+
+### An eager version
 #### (Roland Bock)
 
-<pre><code class="sample" sample="code/eager_logical_and.hpp#eager_logical_and"></code></pre>
+<pre><code class="sample" sample="code/logical_and/eager.hpp#main"></code></pre>
 
-====================
+----
 
-### Short circuiting logical operations
+### A short circuiting version
 #### (Eric Fiselier)
 
-<pre><code class="sample" sample="code/lazy_logical_and.hpp#lazy_logical_and"></code></pre>
+<pre><code class="sample" sample="code/logical_and/lazy.hpp#main"></code></pre>
 
-====================
+----
 
 ## Which one is faster?
 ### No idea, must benchmark
@@ -89,13 +98,37 @@
 
 ### When the conditions are light to evaluate
 
-<iframe width="800" height="400" src="benchmark/light_logical_and/index.html" style="background-color: Snow;"></iframe>
+<iframe width="800" height="400" src="benchmark/logical_and/light.html" style="background-color: Snow;"></iframe>
 
 ----
 
 ### When the conditions are heavy to evaluate
 
-<iframe width="800" height="400" src="benchmark/heavy_logical_and/index.html" style="background-color: Snow;"></iframe>
+<iframe width="800" height="400" src="benchmark/logical_and/heavy.html" style="background-color: Snow;"></iframe>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ====================
 

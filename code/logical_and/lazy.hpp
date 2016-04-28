@@ -1,13 +1,13 @@
 // Copyright Louis Dionne 2016
 // Distributed under the Boost Software License, Version 1.0.
 
-#ifndef LAZY_LOGICAL_AND_HPP
-#define LAZY_LOGICAL_AND_HPP
+#ifndef LOGICAL_AND_LAZY_HPP
+#define LOGICAL_AND_LAZY_HPP
 
 #include <type_traits>
 
 
-// sample(lazy_logical_and)
+// sample(main)
 template <typename Condition, typename T = void>
 struct lazy_enable_if
     : std::enable_if<Condition::value, T>

@@ -1,0 +1,21 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+#include <logical_and/recursive.hpp>
+
+
+template <int, typename T>
+struct is_true : T { };
+
+constexpr bool result = logical_and<
+    <%=
+        [
+            (1...(n/2)).map { |i| "is_true<#{i}, std::true_type>" }.to_a,
+            "is_true<#{n/2}, std::false_type>",
+            ((n/2)+1..n).map { |i| "is_true<#{i}, std::true_type>" }.to_a
+        ].flatten.join(', ')
+    %>
+>::value;
+
+int main() { }
