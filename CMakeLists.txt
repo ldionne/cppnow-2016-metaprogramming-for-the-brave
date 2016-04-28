@@ -10,32 +10,17 @@ find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
 
 include(ExternalProject)
-ExternalProject_Add(Hana
-    GIT_REPOSITORY https://github.com/ldionne/hana
-    GIT_TAG origin/develop
-    TIMEOUT 10
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
+ExternalProject_Add(Hana EXCLUDE_FROM_ALL 1
+    URL https://github.com/boostorg/hana/archive/develop.zip
+    TIMEOUT 120
+    PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dependencies/hana"
     CONFIGURE_COMMAND "" # Disable configure step
-    BUILD_COMMAND ""   # Disable build step
-    INSTALL_COMMAND "" # Disable install step
-    TEST_COMMAND ""    # Disable test step
+    BUILD_COMMAND ""     # Disable build step
+    INSTALL_COMMAND ""   # Disable install step
+    TEST_COMMAND ""      # Disable test step
     UPDATE_COMMAND ""    # Disable source work-tree update
 )
 ExternalProject_Get_Property(Hana SOURCE_DIR)
-include_directories(${SOURCE_DIR}/include)
-
-ExternalProject_Add(Meta
-    GIT_REPOSITORY https://github.com/ericniebler/meta
-    GIT_TAG origin/master
-    TIMEOUT 10
-    PREFIX "${CMAKE_CURRENT_BINARY_DIR}"
-    CONFIGURE_COMMAND "" # Disable configure step
-    BUILD_COMMAND ""   # Disable build step
-    INSTALL_COMMAND "" # Disable install step
-    TEST_COMMAND ""    # Disable test step
-    UPDATE_COMMAND ""    # Disable source work-tree update
-)
-ExternalProject_Get_Property(Meta SOURCE_DIR)
 include_directories(${SOURCE_DIR}/include)
 
 
