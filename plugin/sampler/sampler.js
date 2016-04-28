@@ -19,10 +19,6 @@
         throw 'The sampler.js plugin for reveal.js requires jQuery to be loaded.';
     }
 
-    if (typeof hljs == 'undefined') {
-        console.log('Highlight.js is not loaded (yet); code highlighting might not work.');
-    }
-
     $(".sample").each(function(i, element) {
         var slug = element.getAttribute('sample').match(/([^#]+)#(.+)/);
         var file = slug[1], sampleName = slug[2];
@@ -43,7 +39,9 @@
 
             var extension = file.split('.').pop();
             $(element).text(sample[1]);
-            $(element).addClass("language-" + extension);
+            if (!$(element).is('[class*="language-"]') && !$(element).is('[class*="lang-"]')) {
+                $(element).addClass("language-" + extension);
+            }
             if (typeof hljs != 'undefined') {
                 hljs.highlightBlock(element);
             }
