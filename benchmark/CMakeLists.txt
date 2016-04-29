@@ -51,6 +51,17 @@ metabench_add_benchmark(benchmark.overloading.vertical
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/overloading/vertical.html
 )
 
+# symbols
+metabench_add_dataset(dataset.symbols.length symbols/length.cpp.erb "(0..100_000).step(1000)" NAME "symbol of length n")
+# metabench_add_dataset(dataset.symbols.number symbols/number.cpp.erb "(0..2000).step(50)" NAME "n short symbols")
+metabench_add_benchmark(benchmark.symbols
+    DATASETS dataset.symbols.length
+             # dataset.symbols.number
+    TITLE "Symbols"
+    XLABEL "n"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/symbols.html
+)
+
 # filter
 metabench_add_dataset(dataset.filter.naive filter/naive.cpp.erb "(0..100).step(10)")
 metabench_add_dataset(dataset.filter.good  filter/good.cpp.erb  "(0..100).step(10)")

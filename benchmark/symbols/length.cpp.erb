@@ -1,0 +1,37 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+#include <cstddef>
+
+
+typedef struct Symbol_<%= (1..n).to_a.join %> { } Symbol;
+
+template <typename ...T>
+struct list { };
+
+template <typename List, typename ...T>
+struct append;
+
+template <typename ...T, typename ...U>
+struct append<list<T...>, U...> { using type = list<T..., U...>; };
+
+template <int i, typename List = list<>>
+struct generate_symbol;
+
+template <typename List>
+struct generate_symbol<0, List> {
+    using type = List;
+};
+
+template <int i, typename List>
+struct generate_symbol {
+    using Next = typename append<List, Symbol>::type;
+    using type = typename generate_symbol<i-1,
+        typename append<List, Next>::type
+    >::type;
+};
+
+generate_symbol<16>::type f() { return {}; }
+
+int main() { }
