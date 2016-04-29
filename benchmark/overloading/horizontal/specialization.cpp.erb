@@ -1,0 +1,20 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+template <int>
+struct arg { using type = arg; };
+
+template <typename ...>
+struct function { };
+
+template <>
+struct function<
+    <%= (1..n).map { |i| "arg<#{i}>::type" }.join(', ') %>
+> { };
+
+int main() {
+    function<
+        <%= (1..n).map { |i| "arg<#{i}>" }.join(', ') %>
+    >{};
+}

@@ -31,6 +31,26 @@ metabench_add_benchmark(benchmark.logical_and.heavy
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/logical_and/heavy.html
 )
 
+# overloading/horizontal
+metabench_add_dataset(dataset.overloading.horizontal.overloading    overloading/horizontal/overloading.cpp.erb    "(0..2000).step(50)" NAME "overloading")
+metabench_add_dataset(dataset.overloading.horizontal.specialization overloading/horizontal/specialization.cpp.erb "(0..2000).step(50)" NAME "specialization")
+metabench_add_benchmark(benchmark.overloading.horizontal
+    DATASETS dataset.overloading.horizontal.overloading
+             dataset.overloading.horizontal.specialization
+    TITLE "Overload resolution vs specialization (horizontal)"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/overloading/horizontal.html
+)
+
+# overloading/vertical
+metabench_add_dataset(dataset.overloading.vertical.overloading    overloading/horizontal/overloading.cpp.erb    "(0..2000).step(50)" NAME "overloading")
+metabench_add_dataset(dataset.overloading.vertical.specialization overloading/horizontal/specialization.cpp.erb "(0..2000).step(50)" NAME "specialization")
+metabench_add_benchmark(benchmark.overloading.vertical
+    DATASETS dataset.overloading.vertical.overloading
+             dataset.overloading.vertical.specialization
+    TITLE "Overload resolution vs specialization (vertical)"
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/overloading/vertical.html
+)
+
 # filter
 metabench_add_dataset(dataset.filter.naive filter/naive.cpp.erb "(0..100).step(10)")
 metabench_add_dataset(dataset.filter.good  filter/good.cpp.erb  "(0..100).step(10)")
@@ -55,6 +75,8 @@ metabench_add_benchmark(benchmark.tuple_cat
 add_custom_target(benchmarks
     DEPENDS benchmark.logical_and.light
             benchmark.logical_and.heavy
+            benchmark.overloading.horizontal
+            benchmark.overloading.vertical
             benchmark.filter
             benchmark.tuple_cat
 )
