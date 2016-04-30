@@ -1,0 +1,48 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+#include <iostream>
+
+
+template <typename Left, typename Right>
+struct plus {
+    Left _left;
+    Right _right;
+    auto operator()() { return _left() + _right(); }
+};
+
+<%
+    tree_height = env[:TREE_HEIGHT]
+    tree_size = 2**tree_height
+
+    # Functions implementing basic heap indexing (find the index of the
+    # children from the index of the parent in a complete binary tree).
+    left_child = -> (i) { 2*i + 1 }
+    right_child = -> (i) { left_child[i] + 1 }
+    is_leaf = -> (i) { left_child[i] > tree_size }
+%>
+
+// Declare the leave types
+<% (0..tree_size).to_a.reject { |i| not is_leaf[i] }.each do |i| %>
+    typedef struct Leaf<%= i %>_<%= n.times.map { 'x' }.join %> {
+        int operator()() const { return 1; }
+    } Leaf<%= i %>;
+<% end %>
+
+template <typename Left, typename Right>
+plus<Left, Right> operator+(Left const& left, Right const& right) {
+    return {left, right};
+}
+
+int main() {
+    <% (0..tree_size).to_a.reverse.each do |i| %>
+        <% if is_leaf[i] %>
+            Leaf<%= i %> e<%= i %>;
+        <% else %>
+            auto e<%= i %> = e<%= left_child[i] %> + e<%= right_child[i] %>;
+        <% end %>
+    <% end %>
+
+    std::cout << e0() << std::endl;
+}

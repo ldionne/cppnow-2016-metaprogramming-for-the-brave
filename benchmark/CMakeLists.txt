@@ -52,13 +52,11 @@ metabench_add_benchmark(benchmark.overloading.vertical
 )
 
 # symbols
-metabench_add_dataset(dataset.symbols.length symbols/length.cpp.erb "(0..100_000).step(1000)" NAME "symbol of length n")
-# metabench_add_dataset(dataset.symbols.number symbols/number.cpp.erb "(0..2000).step(50)" NAME "n short symbols")
+metabench_add_dataset(dataset.symbols.et symbols/et.cpp.erb "(0..100_000).step(1000)" ENV "{TREE_HEIGHT: 6}")
 metabench_add_benchmark(benchmark.symbols
-    DATASETS dataset.symbols.length
-             # dataset.symbols.number
-    TITLE "Symbols"
-    XLABEL "n"
+    DATASETS dataset.symbols.et
+    TITLE "Compile-time as a function of symbol length"
+    XLABEL "Symbol length"
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/symbols.html
 )
 

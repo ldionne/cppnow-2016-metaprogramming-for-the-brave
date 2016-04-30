@@ -178,13 +178,23 @@ int main() {
 
 ----
 
+### Example: expression templates
+
+<pre><code class="sample" sample="code/expression_templates.cpp#main"></code></pre>
+
+Note:
+Give credit to Agustin Bergé for help on this test case.
+
+----
+
 <iframe width="800" height="400" src="benchmark/symbols.html" style="background-color: Snow;"></iframe>
 
 Note:
 Long symbol names cause large executables to be generated, and outputing a
-100MB file isn't free.
+100MB file is quite costly. But the compiler really is doing more work,
+because outputing to /dev/null gives a similar benchmark.
 
-<!-- TODO: Improve this part -->
+TODO: Suggest solutions?
 
 ====================
 
