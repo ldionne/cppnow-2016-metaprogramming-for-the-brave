@@ -208,11 +208,65 @@ than constexpr.
 
 ====================
 
-### Tip 5: Always benchmark
+### Tip 5: Never assume, always benchmark
+
+- Different compilers behave differently
+- The execution model is hard to predict
+- Simply counting instantiations doesn't work
 
 ----
 
-<!-- TODO: Explain what is Metabench, and briefly how to use it. -->
+<div style="position:relative" >
+    <h3 class="fragment fade-out" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" data-fragment-index="1">
+        But compile-time benchmarks are hard to set up...
+    </h3>
+    <h3 class="fragment fade-in" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" data-fragment-index="1">
+        Not anymore!
+    </h3>
+</div>
+
+----
+
+### Introducing [Metabench](https://github.com/ldionne/metabench)
+
+----
+
+### 1. Write your benchmark
+
+`std.cpp.erb`:
+<pre><code class="sample lang-cpp" sample="benchmark/make_tuple/std.cpp.erb#main"></code></pre>
+
+`hana.cpp.erb`:
+<pre><code class="sample lang-cpp" sample="benchmark/make_tuple/hana.cpp.erb#main"></code></pre>
+
+----
+
+### 2. Setup Metabench
+
+`CMakeLists.txt`:
+<pre><code class="sample lang-cmake" sample="benchmark/make_tuple/CMakeLists.txt#main"></code></pre>
+
+----
+
+### 3. Build the benchmark
+
+<!-- TODO: Show a GIF or a terminal recording -->
+
+----
+
+### 4. Tadam!
+
+<iframe width="800" height="400" src="benchmark/make_tuple/make_tuple.html" style="background-color: Snow;"></iframe>
+
+TODO:
+Use the newest Metabench.
+
+----
+
+### Goals
+
+- Simple
+- Self-contained
 
 ====================
 

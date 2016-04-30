@@ -60,6 +60,8 @@ metabench_add_benchmark(benchmark.symbols
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/symbols.html
 )
 
+add_subdirectory(make_tuple)
+
 # filter
 metabench_add_dataset(dataset.filter.naive filter/naive.cpp.erb "(0..100).step(10)")
 metabench_add_dataset(dataset.filter.good  filter/good.cpp.erb  "(0..100).step(10)")
@@ -88,4 +90,5 @@ add_custom_target(benchmarks
             benchmark.overloading.vertical
             benchmark.filter
             benchmark.tuple_cat
+            benchmark.make_tuple # defined in make_tuple/
 )
