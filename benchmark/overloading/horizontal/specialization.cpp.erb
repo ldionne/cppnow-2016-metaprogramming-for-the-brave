@@ -14,7 +14,9 @@ struct function<
 > { };
 
 int main() {
+#if defined(METABENCH)
     function<
         <%= (1..n).map { |i| "arg<#{i}>" }.join(', ') %>
     >{};
+#endif
 }

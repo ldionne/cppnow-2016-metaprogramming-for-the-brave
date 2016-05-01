@@ -16,6 +16,7 @@ struct is_true : T {
     using work = typename do_stuff<identity, 128>::type;
 };
 
+#if defined(METABENCH)
 constexpr bool result = logical_and<
     <%=
         [
@@ -25,5 +26,6 @@ constexpr bool result = logical_and<
         ].flatten.join(', ')
     %>
 >::value;
+#endif
 
 int main() { }

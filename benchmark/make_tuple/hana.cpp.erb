@@ -7,6 +7,8 @@
 namespace hana = boost::hana;
 
 int main() {
+#if defined(METABENCH)
     auto tuple = hana::make_tuple(<%= (1..n).to_a.join(', ') %>);
+#endif
 }
 // end-sample

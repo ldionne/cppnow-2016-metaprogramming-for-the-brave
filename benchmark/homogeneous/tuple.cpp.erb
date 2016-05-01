@@ -13,6 +13,7 @@ int main () {
     unsigned long long result = 0;
     for (int iteration = 0; iteration < 1 << 10; ++iteration) {
 
+#if defined(METABENCH)
         hana::tuple<<%= (1..n).map { 'int' }.join(', ') %>> ints{
             <%= (1..n).map { 'std::rand()' }.join(', ') %>
         };
@@ -20,5 +21,7 @@ int main () {
         hana::for_each(ints, [&](int i) { sum += i; });
 
         result += sum;
+#endif
+
     }
 }

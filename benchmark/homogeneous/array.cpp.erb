@@ -10,6 +10,7 @@ int main () {
     unsigned long long result = 0;
     for (int iteration = 0; iteration < 1 << 10; ++iteration) {
 
+#if defined(METABENCH)
         std::array<int, <%= n %>> ints{{
             <%= (1..n).map { 'std::rand()' }.join(', ') %>
         }};
@@ -18,5 +19,7 @@ int main () {
             sum += i;
 
         result += sum;
+#endif
+
     }
 }

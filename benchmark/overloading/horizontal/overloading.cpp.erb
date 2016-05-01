@@ -8,7 +8,9 @@ struct arg { using type = arg; };
 void function(<%= (1..n).map { |i| "arg<#{i}>::type" }.join(', ') %>) { }
 
 int main() {
+#if defined(METABENCH)
     function(
         <%= (1..n).map { |i| "arg<#{i}>{}" }.join(', ') %>
     );
+#endif
 }

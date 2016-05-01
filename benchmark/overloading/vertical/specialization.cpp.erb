@@ -13,7 +13,9 @@ struct function { };
 <% end %>
 
 int main() {
+#if defined(METABENCH)
     <% (1..n).each do |i| %>
         function<arg<<%= i %>>>{};
     <% end %>
+#endif
 }

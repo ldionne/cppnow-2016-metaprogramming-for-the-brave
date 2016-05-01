@@ -9,9 +9,11 @@ namespace hana = boost::hana;
 
 
 int main() {
+#if defined(METABENCH)
     <% (0..n).each do |i| %>
         auto t<%= i %> = hana::make_tuple(0, '1', 2.2, 3.3f, nullptr);
     <% end %>
 
     auto cat = ::tuple_cat(<%= (0..n).map { |i| "t#{i}" }.join(', ') %>);
+#endif
 }

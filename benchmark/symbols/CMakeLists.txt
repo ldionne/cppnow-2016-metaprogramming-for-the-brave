@@ -4,7 +4,7 @@
 metabench_add_dataset(dataset.symbols.horizontal horizontal.cpp.erb "(0..100_000).step(1000)")
 metabench_add_dataset(dataset.symbols.vertical vertical.cpp.erb "(1..17)")
 
-metabench_add_benchmark(benchmark.symbols.time
+metabench_add_chart(benchmark.symbols.time
     DATASETS dataset.symbols.horizontal dataset.symbols.vertical
     TITLE "Compile-time as a function of symbol length"
     XLABEL "Symbol length"
@@ -12,7 +12,7 @@ metabench_add_benchmark(benchmark.symbols.time
     ASPECT COMPILATION_TIME
 )
 
-metabench_add_benchmark(benchmark.symbols.size
+metabench_add_chart(benchmark.symbols.size
     DATASETS dataset.symbols.horizontal dataset.symbols.vertical
     TITLE "Executable size as a function of symbol length"
     XLABEL "Symbol length"

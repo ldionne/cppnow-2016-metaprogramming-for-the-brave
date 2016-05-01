@@ -37,6 +37,7 @@ plus<Left, Right> operator+(Left const& left, Right const& right) {
 }
 
 int main() {
+#if defined(METABENCH)
     <% (0..tree_size).to_a.reverse.each do |i| %>
         <% if is_leaf[i] %>
             Leaf<%= i %> e<%= i %>;
@@ -46,4 +47,5 @@ int main() {
     <% end %>
 
     std::cout << e0() << std::endl;
+#endif
 }

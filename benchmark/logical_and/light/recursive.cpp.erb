@@ -8,6 +8,7 @@
 template <int, typename T>
 struct is_true : T { };
 
+#if defined(METABENCH)
 constexpr bool result = logical_and<
     <%=
         [
@@ -17,5 +18,6 @@ constexpr bool result = logical_and<
         ].flatten.join(', ')
     %>
 >::value;
+#endif
 
 int main() { }

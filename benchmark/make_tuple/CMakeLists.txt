@@ -9,7 +9,7 @@ metabench_add_dataset(std_tuple  "std.cpp.erb" "(1..50).step(5)")
 metabench_add_dataset(hana_tuple "hana.cpp.erb" "(1..50).step(5)")
 
 # Add a new chart
-metabench_add_benchmark(benchmark.make_tuple
+metabench_add_chart(benchmark.make_tuple
     DATASETS std_tuple hana_tuple
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/make_tuple.html
 )
