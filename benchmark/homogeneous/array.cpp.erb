@@ -1,0 +1,22 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+#include <array>
+#include <cstdlib>
+
+
+int main () {
+    unsigned long long result = 0;
+    for (int iteration = 0; iteration < 1 << 10; ++iteration) {
+
+        std::array<int, <%= n %>> ints{{
+            <%= (1..n).map { 'std::rand()' }.join(', ') %>
+        }};
+        int sum = 0;
+        for (int i : ints)
+            sum += i;
+
+        result += sum;
+    }
+}

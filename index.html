@@ -46,11 +46,15 @@
 ## Metaprogramming for the brave
 ### Louis Dionne, C++Now 2016
 
-==============================================================================
+====================
 
 ## No cute intro, this is a serious talk
 
 ![Rambo](img/rambo.jpg)
+
+==============================================================================
+
+## A few general tips
 
 ====================
 
@@ -276,8 +280,31 @@ Use the newest Metabench.
 
 ====================
 
+### Tip 6: Know when to use homogeneous containers
+
+----
+
+### Which one is better?
+
+<pre><code class="sample" sample="code/homogeneous.cpp#tuple"></code></pre>
+
+<pre><code class="sample" sample="code/homogeneous.cpp#array"></code></pre>
+
+----
+
+### Well, that depends on the number of elements
+
+<iframe width="800" height="400" src="benchmark/homogeneous.html" style="background-color: Snow;"></iframe>
+
+----
+
+### Why? Look at the assembly
+
+TODO: Show the assembly
+
+====================
+
 TODO:
-- Talk about loop rerolling
 - Talk about the idea behind Hana's algorithms; compute indices at compile-time
   and then BOOM at runtime
 

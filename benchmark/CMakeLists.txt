@@ -51,6 +51,7 @@ metabench_add_benchmark(benchmark.overloading.vertical
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/overloading/vertical.html
 )
 
+add_subdirectory(homogeneous)
 add_subdirectory(symbols)
 add_subdirectory(make_tuple)
 
@@ -85,5 +86,6 @@ add_custom_target(benchmarks
             benchmark.symbols.size_compare
             benchmark.filter
             benchmark.tuple_cat
+            benchmark.homogeneous
             benchmark.make_tuple # defined in make_tuple/
 )
