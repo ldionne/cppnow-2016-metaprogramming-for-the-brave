@@ -13,7 +13,8 @@ struct plus {
 };
 
 <%
-    tree_height = env[:TREE_HEIGHT]
+    symbol_length = n
+    tree_height = 6
     tree_size = 2**tree_height
 
     # Functions implementing basic heap indexing (find the index of the
@@ -25,7 +26,7 @@ struct plus {
 
 // Declare the leave types
 <% (0..tree_size).to_a.reject { |i| not is_leaf[i] }.each do |i| %>
-    typedef struct Leaf<%= i %>_<%= n.times.map { 'x' }.join %> {
+    typedef struct Leaf<%= i %>_<%= symbol_length.times.map { 'x' }.join %> {
         int operator()() const { return 1; }
     } Leaf<%= i %>;
 <% end %>

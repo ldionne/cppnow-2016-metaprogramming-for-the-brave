@@ -83,7 +83,6 @@ add_custom_target(benchmarks
             benchmark.overloading.vertical
             benchmark.symbols.time
             benchmark.symbols.size
-            benchmark.symbols.size_compare
             benchmark.filter
             benchmark.tuple_cat
             benchmark.homogeneous

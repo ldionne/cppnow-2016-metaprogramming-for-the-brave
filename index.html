@@ -178,6 +178,40 @@ Give credit to Agustin Bergé for help on this test case.
 
 ----
 
+### Vertical explosion
+
+```c++
+Leaf<1> exp0;
+Leaf<2> exp1;
+auto exp2 = exp0 + exp1;
+auto exp3 = exp2 + exp2;
+auto exp4 = exp3 + exp3;
+...
+auto expN = expN-1 + expN-1;
+
+std::cout << expN() << std::endl;
+```
+
+Note:
+The actual benchmark we use is less naive and doesn't have redudancy in the
+types of the left and right operands.
+
+----
+
+### Horizontal growth
+
+```c++
+Leaf_symbol-of-length-n<1> exp0;
+Leaf_symbol-of-length-n<2> exp1;
+auto exp2 = exp0 + exp1;
+auto exp3 = exp2 + exp2;
+auto exp4 = exp3 + exp3;
+
+std::cout << exp4() << std::endl;
+```
+
+----
+
 ### First problem: compile-times
 
 <iframe width="800" height="400" src="benchmark/symbols/time.html" style="background-color: Snow;"></iframe>
@@ -201,8 +235,6 @@ TODO: Suggest a solution for the compile-times? Talk about anonymous inline name
 ----
 
 ### No! Have to use LTO
-
-<iframe width="800" height="400" src="benchmark/symbols/size_compare.html" style="background-color: Snow;"></iframe>
 
 TODO: Show an example where optimization does not do the trick, and only LTO does it
 
