@@ -51,15 +51,7 @@ metabench_add_benchmark(benchmark.overloading.vertical
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/overloading/vertical.html
 )
 
-# symbols
-metabench_add_dataset(dataset.symbols.et symbols/et.cpp.erb "(0..100_000).step(1000)" ENV "{TREE_HEIGHT: 6}")
-metabench_add_benchmark(benchmark.symbols
-    DATASETS dataset.symbols.et
-    TITLE "Compile-time as a function of symbol length"
-    XLABEL "Symbol length"
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/symbols.html
-)
-
+add_subdirectory(symbols)
 add_subdirectory(make_tuple)
 
 # filter
@@ -88,6 +80,9 @@ add_custom_target(benchmarks
             benchmark.logical_and.heavy
             benchmark.overloading.horizontal
             benchmark.overloading.vertical
+            benchmark.symbols.time
+            benchmark.symbols.size
+            benchmark.symbols.size_compare
             benchmark.filter
             benchmark.tuple_cat
             benchmark.make_tuple # defined in make_tuple/

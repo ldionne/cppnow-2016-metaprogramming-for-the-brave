@@ -54,20 +54,7 @@
 
 ====================
 
-## Outline
-
-- Optimizing for compile-time performance
-- Optimizing for runtime performance
-- Connecting both worlds
-- Miscellanea
-
-====================
-
-## Compile-time
-
-====================
-
-### Tip 1: Prefer variadic expansion to recursion
+### Tip 1: Prefer variadic expansion to recursive metafunctions
 
 ----
 
@@ -174,7 +161,7 @@ int main() {
 
 ====================
 
-### Tip 3: Be wary of symbol lengths
+### Tip 3: Keep your symbols short
 
 ----
 
@@ -187,14 +174,33 @@ Give credit to Agustin Bergé for help on this test case.
 
 ----
 
-<iframe width="800" height="400" src="benchmark/symbols.html" style="background-color: Snow;"></iframe>
+### First problem: compile-times
+
+<iframe width="800" height="400" src="benchmark/symbols/time.html" style="background-color: Snow;"></iframe>
 
 Note:
-Long symbol names cause large executables to be generated, and outputing a
-100MB file is quite costly. But the compiler really is doing more work,
-because outputing to /dev/null gives a similar benchmark.
+Mangling long symbols takes time and RAM. Also, they appear in the object files
+and outputing a large object file takes time (I/O is slow).
 
-TODO: Suggest solutions?
+TODO: Suggest a solution for the compile-times? Talk about anonymous inline namespaces?
+
+----
+
+### Second problem: huge executables
+
+<iframe width="800" height="400" src="benchmark/symbols/size.html" style="background-color: Snow;"></iframe>
+
+----
+
+### But surely `-O3` fixes that?
+
+----
+
+### No! Have to use LTO
+
+<iframe width="800" height="400" src="benchmark/symbols/size_compare.html" style="background-color: Snow;"></iframe>
+
+TODO: Show an example where optimization does not do the trick, and only LTO does it
 
 ====================
 
@@ -270,40 +276,10 @@ Use the newest Metabench.
 
 ====================
 
-## Runtime
-
-====================
-
-### Tip 6: Be wary of deep recursion
-
-----
-
-<!-- TODO: Show a recursive implementation of some algorithm, and how the
-           compiler struggles to optimize it. -->
-
-====================
-
-### Tip 7: Watch out for long symbols
-
-----
-
 TODO:
-Explain how this can cause bloat, and how it can be made better through LTO or
-anonymous namespaces. Do not repeat what has been said previously.
-
-====================
-
-### Tip 8:
-
-
-
-
-
-
-
-
-
-
+- Talk about loop rerolling
+- Talk about the idea behind Hana's algorithms; compute indices at compile-time
+  and then BOOM at runtime
 
 
 
