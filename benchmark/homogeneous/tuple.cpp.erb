@@ -6,12 +6,13 @@
 #include <boost/hana/tuple.hpp>
 
 #include <cstdlib>
+#include <iostream>
 namespace hana = boost::hana;
 
 
 int main () {
     unsigned long long result = 0;
-    for (int iteration = 0; iteration < 1 << 10; ++iteration) {
+    for (int iteration = 0; iteration < 1 << 15; ++iteration) {
 
 #if defined(METABENCH)
         hana::tuple<<%= (1..n).map { 'int' }.join(', ') %>> ints{
@@ -24,4 +25,6 @@ int main () {
 #endif
 
     }
+
+    std::cout << result << std::endl;
 }

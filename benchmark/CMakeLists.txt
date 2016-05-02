@@ -85,6 +85,7 @@ add_custom_target(benchmarks
             benchmark.symbols.size
             benchmark.filter
             benchmark.tuple_cat
-            benchmark.homogeneous
+            benchmark.homogeneous.compilation_time
+            benchmark.homogeneous.execution_time
             benchmark.make_tuple # defined in make_tuple/
 )

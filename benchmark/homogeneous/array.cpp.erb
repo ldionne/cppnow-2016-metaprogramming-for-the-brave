@@ -4,11 +4,12 @@
 
 #include <array>
 #include <cstdlib>
+#include <iostream>
 
 
 int main () {
     unsigned long long result = 0;
-    for (int iteration = 0; iteration < 1 << 10; ++iteration) {
+    for (int iteration = 0; iteration < 1 << 15; ++iteration) {
 
 #if defined(METABENCH)
         std::array<int, <%= n %>> ints{{
@@ -22,4 +23,6 @@ int main () {
 #endif
 
     }
+
+    std::cout << result << std::endl;
 }
