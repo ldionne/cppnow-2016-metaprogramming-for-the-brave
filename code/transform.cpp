@@ -8,7 +8,7 @@
 #include <utility>
 
 
-// sample(transform)
+// sample(main)
 template <typename ...T, typename F, std::size_t ...i>
 auto transform_impl(std::tuple<T...> const& tuple, F const& f,
                     std::index_sequence<i...>)

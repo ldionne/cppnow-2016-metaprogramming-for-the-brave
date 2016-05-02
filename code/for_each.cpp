@@ -8,7 +8,7 @@
 #include <utility>
 
 
-// sample(for_each)
+// sample(main)
 template <typename ...T, typename F, std::size_t ...i>
 void for_each_impl(std::tuple<T...> const& tuple, F const& f,
                    std::index_sequence<i...>)

@@ -337,39 +337,30 @@ than constexpr.
 
 TODO: Show the assembly
 
-====================
+==============================================================================
 
-TODO:
-- Talk about the idea behind Hana's algorithms; compute indices at compile-time
-  and then BOOM at runtime
-
-
-
-
-
-
-
-
-
-
-
-
-
-====================
-
-### Algorithms on heterogeneous sequences
-
-====================
-
-### `transform`
-
-<pre><code class="sample" sample="code/algo.transform.cpp#transform"></code></pre>
+## Implementing tuple algorithms
 
 ====================
 
 ### `for_each`
 
-<pre><code class="sample" sample="code/algo.for_each.cpp#for_each"></code></pre>
+<pre><code class="sample" sample="code/for_each.cpp#main"></code></pre>
+
+====================
+
+### `transform`
+
+<pre><code class="sample" sample="code/transform.cpp#main"></code></pre>
+
+====================
+
+### `select`
+
+<pre><code class="sample" sample="code/select.cpp#main"></code></pre>
+
+Note:
+This will be useful later on.
 
 ====================
 
@@ -377,9 +368,9 @@ TODO:
 
 ====================
 
-### `tuple_cat`
+### `remove_if`
 
-<pre><code class="sample" sample="code/std_tuple_cat.hpp#std.tuple_cat"></code></pre>
+<pre><code class="sample" sample="code/remove_if/recursive.cpp#main"></code></pre>
 
 ----
 
@@ -387,7 +378,46 @@ TODO:
 
 ----
 
-### `tuple_cat`, take two
+### Technically, what's the minimal amount of runtime work we have to do?
+
+Note:
+If we knew the indices of the elements to keep, could we do better?
+
+----
+
+### Let's pretend we know which indices to keep
+
+<pre><code class="sample" sample="code/remove_if/flat.cpp#remove_if"></code></pre>
+
+----
+
+### Now all that's left is to implement `magic`
+
+<pre><code class="sample" sample="code/remove_if/flat.cpp#magic"></code></pre>
+
+----
+
+### Did that pay off?
+
+TODO: show a compile-time benchmark
+
+----
+
+TODO: show a runtime benchmark
+
+----
+
+### Bottom line: always do less work
+
+====================
+
+### This is how libc++ implements `tuple_cat`
+
+<pre><code class="sample" sample="code/std_tuple_cat.hpp#std.tuple_cat"></code></pre>
+
+----
+
+### This is how Hana does it
 
 <pre><code class="sample" sample="code/my_tuple_cat.hpp#my.tuple_cat"></code></pre>
 
@@ -397,45 +427,40 @@ TODO:
 
 ====================
 
-### The idea
-Perform the computation on indices, and then involve the original sequence
+### The fundamental idea
+Perform the computation on indices, and then involve the original sequence(s)
 
 ====================
 
-### Another one
+### Future directions for Hana
+
+- Lazy views (experimental support right now)
+
+TODO: complete future directions
+
+==============================================================================
+
+## Tuples
 
 ====================
 
-### `filter` (naive)
+### Recursive implementation
 
-<pre><code class="sample" sample="code/filter.naive.hpp#filter.naive"></code></pre>
+DO NOT DO THIS
 
-----
-
-### `filter` (good)
-
-<pre><code class="sample" sample="code/filter.good.hpp#filter.good"></code></pre>
-
-----
-
-<!-- TODO: do this benchmark -->
+STDLIBC++, I'M LOOKING AT YOU
 
 ====================
 
-### Let's now dive into tuples
+### Multiple inheritance
 
-----
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#main"></code></pre>
 
-### Classic multiple inheritance
-
-<!-- TODO: tuple.multiple_inheritance example -->
-
-----
+====================
 
 ### Aligned storage (experimental)
 
-<!-- TODO: tuple.aligned_storage example -->
-
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#main"></code></pre>
 
 Note:
 Alisdair will present something similar in his presentation, so I won't go
