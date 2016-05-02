@@ -20,3 +20,8 @@ metabench_add_chart(benchmark.homogeneous.execution_time
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/execution_time.html
     ASPECT EXECUTION_TIME
 )
+
+add_dependencies(benchmarks
+    benchmark.homogeneous.execution_time
+    benchmark.homogeneous.compilation_time
+)

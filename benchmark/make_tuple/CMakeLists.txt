@@ -14,3 +14,5 @@ metabench_add_chart(benchmark.make_tuple
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/make_tuple.html
 )
 # end-sample
+
+add_dependencies(benchmarks benchmark.make_tuple)
