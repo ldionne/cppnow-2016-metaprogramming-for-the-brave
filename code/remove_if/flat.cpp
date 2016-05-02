@@ -1,30 +1,30 @@
 // Copyright Louis Dionne 2016
 // Distributed under the Boost Software License, Version 1.0.
 
-#include <boost/hana/tuple.hpp>
-namespace hana = boost::hana;
+#include <cassert>
+#include <tuple>
+#include <type_traits>
 
-// sample(magic)
+#include "flat.hpp"
 
-// end-sample
-
-
-template <typename ...T, std::size_t ...i>
-std::tuple<std::tuple_element_t<i, Tuple&&>...>
-select(Tuple&& tuple, std::index_sequence<i...> const&) {
-    return std::tuple<std::tuple_element_t<i, Tuple&&>...>{
-        std::get<i>(static_cast<Tuple&&>(tuple))...
-    };
-}
-
-// sample(remove_if)
-template <typename >
-auto remove_if(std::tuple<T...> const& tuple, Pred const& pred) {
-    using Indices = typename magic<Pred, T...>::type;
-    return select(tuple, Indices{}); // select coming handy!
-}
-// end-sample
 
 int main() {
+    auto is_even = [](auto i) {
+        return std::integral_constant<bool,
+            decltype(i)::value % 2 == 0
+        >{};
+    };
 
+    auto ints = std::make_tuple(
+        std::integral_constant<int, 0>{},
+        std::integral_constant<int, 1>{},
+        std::integral_constant<int, 2>{},
+        std::integral_constant<int, 3>{},
+        std::integral_constant<int, 4>{},
+        std::integral_constant<int, 5>{},
+        std::integral_constant<int, 6>{},
+        std::integral_constant<int, 7>{}
+    );
+
+    assert(remove_if(ints, is_even) == std::make_tuple(1, 3, 5, 7));
 }

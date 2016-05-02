@@ -1,0 +1,38 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+#include <remove_if/flat.hpp>
+
+#include <string>
+#include <tuple>
+#include <type_traits>
+#include <utility>
+
+
+int main() {
+    auto is_even = [](auto const& p) {
+        constexpr int v = decltype(p.first)::value;
+        return std::integral_constant<bool, v % 2 == 0>{};
+    };
+
+    auto tuple = std::make_tuple(
+        <% (0...n).each do |i| %>
+        <%= ',' unless i == 0 %>
+
+        std::make_pair(std::integral_constant<int, <%= i %>>{},
+                       std::string{"something not too small"})
+        <% end %>
+    );
+
+    for (int iteration = 0; iteration < 1 << 15; ++iteration) {
+
+#if defined(METABENCH)
+        auto result = remove_if(tuple, is_even);
+        <% (0...n/2).each do |i| %>
+        std::get<<%= i %>>(result);
+        <% end %>
+#endif
+
+    }
+}

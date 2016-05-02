@@ -8,12 +8,12 @@
 
 
 // sample(main)
-template <typename ...T, std::size_t ...i>
-std::tuple<std::tuple_element_t<i, Tuple&&>...>
-select(Tuple&& tuple, std::index_sequence<i...> const&) {
-    return std::tuple<std::tuple_element_t<i, Tuple&&>...>{
-        std::get<i>(static_cast<Tuple&&>(tuple))...
-    };
+template <typename Tuple, std::size_t ...i>
+auto select(Tuple&& tuple, std::index_sequence<i...> const&) {
+    using Result = std::tuple<
+        std::tuple_element_t<i, std::remove_reference_t<Tuple>>...
+    >;
+    return Result{std::get<i>(static_cast<Tuple&&>(tuple))...};
 }
 // end-sample
 

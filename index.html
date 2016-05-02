@@ -370,7 +370,25 @@ This will be useful later on.
 
 ### `remove_if`
 
-<pre><code class="sample" sample="code/remove_if/recursive.cpp#main"></code></pre>
+<pre><code class="sample" sample="code/remove_if/recursive.hpp#remove_if"></code></pre>
+
+----
+
+### Base case
+
+<pre><code class="sample" sample="code/remove_if/recursive.hpp#remove_if_impl-1"></code></pre>
+
+----
+
+### Not taking the element
+
+<pre><code class="sample" sample="code/remove_if/recursive.hpp#remove_if_impl-2"></code></pre>
+
+----
+
+### Taking the element
+
+<pre><code class="sample" sample="code/remove_if/recursive.hpp#remove_if_impl-3"></code></pre>
 
 ----
 
@@ -387,23 +405,31 @@ If we knew the indices of the elements to keep, could we do better?
 
 ### Let's pretend we know which indices to keep
 
-<pre><code class="sample" sample="code/remove_if/flat.cpp#remove_if"></code></pre>
+<pre><code class="sample" sample="code/remove_if/flat.hpp#remove_if"></code></pre>
 
 ----
 
 ### Now all that's left is to implement `magic`
 
-<pre><code class="sample" sample="code/remove_if/flat.cpp#magic"></code></pre>
+<pre><code class="sample" sample="code/remove_if/flat.hpp#magic-1"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/remove_if/flat.hpp#magic-2"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/remove_if/flat.hpp#magic-3"></code></pre>
 
 ----
 
 ### Did that pay off?
 
-TODO: show a compile-time benchmark
+<iframe width="800" height="400" src="benchmark/remove_if/compilation_time.html" style="background-color: Snow;"></iframe>
 
 ----
 
-TODO: show a runtime benchmark
+<iframe width="800" height="400" src="benchmark/remove_if/execution_time.html" style="background-color: Snow;"></iframe>
 
 ----
 
