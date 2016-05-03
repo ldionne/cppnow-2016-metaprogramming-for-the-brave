@@ -472,25 +472,77 @@ TODO: complete future directions
 
 ### Recursive implementation
 
-DO NOT DO THIS
+Do not do this!
 
-STDLIBC++, I'M LOOKING AT YOU
+stdlibc++, I'm looking at you!
 
 ====================
 
 ### Multiple inheritance
 
-<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#main"></code></pre>
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#tuple"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#tuple_impl"></code></pre>
+
+----
+
+### Accessing tuple elements
+
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#get"></code></pre>
 
 ====================
 
 ### Aligned storage (experimental)
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#main"></code></pre>
-
 Note:
 Alisdair will present something similar in his presentation, so I won't go
 into the details here.
+
+----
+
+### Computing the offset of members
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#offsets"></code></pre>
+
+TODO: Add the ability to join samples in reveal-sampler
+
+----
+
+### Creating the storage
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#aligned_storage"></code></pre>
+
+----
+
+### Accessing the storage
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#get_raw"></code></pre>
+
+----
+
+### Default constructor
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#default_ctor"></code></pre>
+
+----
+
+### Variadic constructor
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#variadic_ctor"></code></pre>
+
+----
+
+### Destructor
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#dtor"></code></pre>
+
+----
+
+### Typed access to the storage
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#get"></code></pre>
 
 ====================
 
