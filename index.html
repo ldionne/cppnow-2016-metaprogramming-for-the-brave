@@ -439,13 +439,29 @@ If we knew the indices of the elements to keep, could we do better?
 
 ### This is how libc++ implements `tuple_cat`
 
-<pre><code class="sample" sample="code/std_tuple_cat.hpp#std.tuple_cat"></code></pre>
+<pre><code class="sample" sample="code/tuple_cat/std.hpp#tuple_cat"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/tuple_cat/std.hpp#tuple_cat_impl-1"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/tuple_cat/std.hpp#tuple_cat_impl-2"></code></pre>
 
 ----
 
 ### This is how Hana does it
 
-<pre><code class="sample" sample="code/my_tuple_cat.hpp#my.tuple_cat"></code></pre>
+<pre><code class="sample" sample="code/tuple_cat/hana.hpp#tuple_cat"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/tuple_cat/hana.hpp#flatten_indices-1"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/tuple_cat/hana.hpp#flatten_indices-2"></code></pre>
 
 ----
 

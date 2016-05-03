@@ -1,8 +1,8 @@
 // Copyright Louis Dionne 2016
 // Distributed under the Boost Software License, Version 1.0.
 
-#ifndef STD_TUPLE_CAT_HPP
-#define STD_TUPLE_CAT_HPP
+#ifndef TUPLE_CAT_STD_HPP
+#define TUPLE_CAT_STD_HPP
 
 #include <boost/hana/at.hpp>
 #include <boost/hana/tuple.hpp>
@@ -58,11 +58,7 @@ struct apply_cv<T&&, U> { using type = typename apply_cv<T, U>::type&&; };
 
 
 
-// sample(std.tuple_cat)
-constexpr boost::hana::tuple<> tuple_cat() {
-    return boost::hana::tuple<>();
-}
-
+// sample(tuple_cat_impl-1)
 template <typename Types, typename Is, typename Js>
 struct tuple_cat_impl;
 
@@ -72,32 +68,47 @@ struct tuple_cat_impl<boost::hana::tuple<T...>,
                       std::index_sequence<J...>>
 {
     template <typename Tuple0>
-    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0) {
-        return ::forward_as_tuple(std::forward<T>(boost::hana::at_c<I>(t))...,
-                                  boost::hana::at_c<J>(std::forward<Tuple0>(t0))...);
+    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0)
+    {
+        return ::forward_as_tuple(
+            std::forward<T>(boost::hana::at_c<I>(t))...,
+            boost::hana::at_c<J>(std::forward<Tuple0>(t0))...
+        );
     }
+// end-sample
 
+// sample(tuple_cat_impl-2)
     template <typename Tuple0, typename Tuple1, typename ...Tuples>
-    constexpr auto operator()(boost::hana::tuple<T...> t, Tuple0&& t0, Tuple1&& t1, Tuples&& ...tpls) {
+    constexpr auto operator()(boost::hana::tuple<T...> t,
+                              Tuple0&& t0, Tuple1&& t1,
+                              Tuples&& ...tpls)
+    {
         using T0 = typename std::remove_reference<Tuple0>::type;
         using T1 = typename std::remove_reference<Tuple1>::type;
         return tuple_cat_impl<
-            boost::hana::tuple<
-                T...,
-                typename apply_cv<Tuple0, typename tuple_element<J, T0>::type>::type&&...
+            boost::hana::tuple<T...,
+                typename apply_cv<Tuple0,
+                    typename tuple_element<J, T0>::type
+                >::type&&...
             >,
-            std::make_index_sequence<sizeof ...(T) + tuple_size<T0>::value>,
+            std::make_index_sequence<sizeof ...(T) +
+                                     tuple_size<T0>::value>,
             std::make_index_sequence<tuple_size<T1>::value>
         >{}(
             ::forward_as_tuple(
                 std::forward<T>(boost::hana::at_c<I>(t))...,
                 boost::hana::at_c<J>(std::forward<Tuple0>(t0))...
             ),
-            std::forward<Tuple1>(t1),
-            std::forward<Tuples>(tpls)...
+            std::forward<Tuple1>(t1), std::forward<Tuples>(tpls)...
         );
     }
 };
+// end-sample
+
+// sample(tuple_cat)
+constexpr boost::hana::tuple<> tuple_cat() {
+    return boost::hana::tuple<>();
+}
 
 template <typename Tuple0, typename ...Tuples>
 constexpr auto tuple_cat(Tuple0&& t0, Tuples&& ...tpls) {
