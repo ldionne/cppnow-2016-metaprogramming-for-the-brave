@@ -2,9 +2,9 @@
 # Distributed under the Boost Software License, Version 1.0.
 
 # light
-metabench_add_dataset(dataset.logical_and.light.eager     light/eager.cpp.erb     "(0..2000).step(50)")
-metabench_add_dataset(dataset.logical_and.light.lazy      light/lazy.cpp.erb      "(0..2000).step(50)")
-metabench_add_dataset(dataset.logical_and.light.recursive light/recursive.cpp.erb "(0..2000).step(50)")
+metabench_add_dataset(dataset.logical_and.light.eager     light/eager.cpp.erb     "(0..2000).step(50)" NAME "eager")
+metabench_add_dataset(dataset.logical_and.light.lazy      light/lazy.cpp.erb      "(0..2000).step(50)" NAME "lazy")
+metabench_add_dataset(dataset.logical_and.light.recursive light/recursive.cpp.erb "(0..2000).step(50)" NAME "recursive")
 
 metabench_add_chart(benchmark.logical_and.light
     DATASETS dataset.logical_and.light.eager
@@ -15,9 +15,9 @@ metabench_add_chart(benchmark.logical_and.light
 )
 
 # heavy
-metabench_add_dataset(dataset.logical_and.heavy.eager     heavy/eager.cpp.erb     "(0..2000).step(50)")
-metabench_add_dataset(dataset.logical_and.heavy.lazy      heavy/lazy.cpp.erb      "(0..2000).step(50)")
-metabench_add_dataset(dataset.logical_and.heavy.recursive heavy/recursive.cpp.erb "(0..2000).step(50)")
+metabench_add_dataset(dataset.logical_and.heavy.eager     heavy/eager.cpp.erb     "(0..2000).step(50)" NAME "eager")
+metabench_add_dataset(dataset.logical_and.heavy.lazy      heavy/lazy.cpp.erb      "(0..2000).step(50)" NAME "lazy")
+metabench_add_dataset(dataset.logical_and.heavy.recursive heavy/recursive.cpp.erb "(0..2000).step(50)" NAME "recursive")
 
 metabench_add_chart(benchmark.logical_and.heavy
     DATASETS dataset.logical_and.heavy.eager
