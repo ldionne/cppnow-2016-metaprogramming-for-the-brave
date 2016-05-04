@@ -20,7 +20,7 @@ hana::for_each(ints, [&](int i) { sum += i; });
 
 {
 // sample(array)
-std::array<int, 5> ints{1, 2, 3, 4, 5};
+std::array<int, 5> ints{{1, 2, 3, 4, 5}};
 int sum = 0;
 for (int i : ints)
     sum += i;

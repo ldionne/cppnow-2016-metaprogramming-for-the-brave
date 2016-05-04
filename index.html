@@ -547,17 +547,17 @@ stdlibc++, I'm looking at you!
 
 ### Multiple inheritance
 
-<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#tuple"></code></pre>
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.hpp#tuple"></code></pre>
 
 ----
 
-<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#tuple_impl"></code></pre>
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.hpp#tuple_impl"></code></pre>
 
 ----
 
 ### Accessing tuple elements
 
-<pre><code class="sample" sample="code/tuple/multiple_inheritance.cpp#get"></code></pre>
+<pre><code class="sample" sample="code/tuple/multiple_inheritance.hpp#get"></code></pre>
 
 ====================
 
@@ -571,43 +571,43 @@ into the details here.
 
 ### Computing the offset of members
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#offsets"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#offsets"></code></pre>
 
 ----
 
 ### Creating the storage
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#aligned_storage"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#aligned_storage"></code></pre>
 
 ----
 
 ### Accessing the storage
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#get_raw"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#get_raw"></code></pre>
 
 ----
 
 ### Default constructor
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#default_ctor"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#default_ctor"></code></pre>
 
 ----
 
 ### Variadic constructor
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#variadic_ctor"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#variadic_ctor"></code></pre>
 
 ----
 
 ### Destructor
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#dtor"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#dtor"></code></pre>
 
 ----
 
 ### Typed access to the storage
 
-<pre><code class="sample" sample="code/tuple/aligned_storage.cpp#get"></code></pre>
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#get"></code></pre>
 
 ====================
 
@@ -669,8 +669,7 @@ constexpr int f() {
 
 ### Slower than multiple inheritance
 
-<!-- TODO: Show benchmark -->
-
+<iframe width="800" height="400" src="benchmark/tuple.html" style="background-color: Snow;"></iframe>
 
 Note:
 This is surprising, as we would expect pure constexpr to be faster than
