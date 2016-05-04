@@ -40,10 +40,11 @@ struct magic {
     static constexpr std::size_t N_keep = detail::count(
         std::begin(results), std::end(results), false
     );
+
+    using Indices = std::array<std::size_t, N_keep>;
 // end-sample
 
 // sample(magic-2)
-    using Indices = std::array<std::size_t, N_keep>;
     static constexpr Indices compute_indices() {
         Indices indices{};
         std::size_t* out = &const_cast<std::size_t&>(
@@ -57,8 +58,10 @@ struct magic {
 
         return indices;
     }
+// end-sample
 
-    static constexpr Indices indices = compute_indices();
+// sample(magic-1)
+    static constexpr Indices indices = compute_indices(); // ...
 // end-sample
 
 // sample(magic-3)
@@ -76,7 +79,7 @@ struct magic {
 template <typename ...T, typename Pred>
 auto remove_if(std::tuple<T...> const& tuple, Pred const& pred) {
     using Indices = typename magic<Pred, T...>::type;
-    return select(tuple, Indices{}); // select coming handy!
+    return select(tuple, Indices{});
 }
 // end-sample
 

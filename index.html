@@ -41,6 +41,11 @@
                          data-separator="^====+$"
                          data-separator-vertical="^----+$"
                          data-notes="^Note:">
+
+<!-- TODO:
+- Consider interleaving tips with the rest of the presentation.
+- Consider moving the part on Metabench to the end.
+ -->
                 <script type="text/template">
 
 ## Metaprogramming for the brave
@@ -331,6 +336,9 @@ than constexpr.
 
 <iframe width="800" height="400" src="benchmark/homogeneous/execution_time.html" style="background-color: Snow;"></iframe>
 
+Note:
+TODO: std::rand() takes more time than all the rest, that's why the difference doesn't show
+
 ----
 
 ### Why? Look at the assembly
@@ -482,15 +490,15 @@ If we knew the indices of the elements to keep, could we do better?
 
 <iframe width="800" height="400" src="benchmark/remove_if/execution_time.html" style="background-color: Snow;"></iframe>
 
-----
-
-### Bottom line: always do less work
-
 ====================
 
 ### This is how libc++ implements `tuple_cat`
 
 <pre><code class="sample" sample="code/tuple_cat/std.hpp#tuple_cat"></code></pre>
+
+Note:
+TODO: These examples should use std::tuple, like the rest
+TODO: should we use hana::make_tuple in tuple_cat, or forward_as_tuple?
 
 ----
 
@@ -522,14 +530,6 @@ If we knew the indices of the elements to keep, could we do better?
 
 ### The fundamental idea
 Perform the computation on indices, and then involve the original sequence(s)
-
-====================
-
-### Future directions for Hana
-
-- Lazy views (experimental support right now)
-
-TODO: complete future directions
 
 ==============================================================================
 
@@ -603,6 +603,10 @@ into the details here.
 
 <pre><code class="sample" sample="code/tuple/aligned_storage.hpp#dtor"></code></pre>
 
+Note:
+We destruct the elements in reverse order to mimic the behaviour for local
+variables.
+
 ----
 
 ### Typed access to the storage
@@ -643,26 +647,22 @@ into the details here.
 
 ----
 
-### Can't be constexpr (in-place `new`)
+### Can't be constexpr (in-place `new` & destructor)
 
 ```c++
-#include <new>
-
-constexpr int f() {
-    char c{};
-    ::new (&c) char{'x'};
-    return 1;
-}
+constexpr tuple<int, char> t{1, '2'};
 ```
 
 ```
-[snip].cpp:6:15: error: constexpr function never produces a
-                        constant expression [-Winvalid-constexpr]
-constexpr int f() {
-              ^
-[snip].cpp:8:5: note : subexpression not valid in a constant expression
-    ::new (&c) char{'x'};
+[snip].cpp:5:28: error: constexpr variable cannot have non-literal type
+                        'const tuple<int, char>'
+constexpr tuple<int, char> t{1, '2'};
+                           ^
+[snip].hpp:90:5: note : 'tuple<int, char>' is not literal because it
+                        has a user-provided destructor
+    ~tuple() {
     ^
+1 error generated.
 ```
 
 ----
@@ -677,6 +677,15 @@ multiple inheritance. It appears that constexpr evaluation is far from free.
 Again, always benchmark!
 
 ==============================================================================
+
+### Future directions for Hana
+
+- Lazy views (experimental support right now)
+- Dive deeper into the `aligned_storage` alternative
+
+TODO: complete future directions
+
+====================
 
 ## Key takeaways
 

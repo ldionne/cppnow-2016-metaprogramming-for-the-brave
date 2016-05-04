@@ -88,9 +88,9 @@ struct tuple {
 
 // sample(dtor)
     ~tuple() {
-        std::size_t i = 0;
+        std::size_t i = sizeof...(T);
         int expand[] = {
-            (static_cast<T*>(this->get_raw(i++))->~T(), int{})...
+            (static_cast<T*>(this->get_raw(--i))->~T(), int{})...
         };
         (void)expand;
     }

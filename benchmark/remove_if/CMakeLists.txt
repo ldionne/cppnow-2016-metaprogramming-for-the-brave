@@ -1,8 +1,8 @@
 # Copyright Louis Dionne 2016
 # Distributed under the Boost Software License, Version 1.0.
 
-metabench_add_dataset(dataset.remove_if.recursive recursive.cpp.erb "(1..75).step(5)" NAME "recursive")
-metabench_add_dataset(dataset.remove_if.flat      flat.cpp.erb      "(1..75).step(5)" NAME "flat")
+metabench_add_dataset(dataset.remove_if.recursive recursive.cpp.erb "(1..75).step(5)"  NAME "recursive")
+metabench_add_dataset(dataset.remove_if.flat      flat.cpp.erb      "(1..200).step(5)" NAME "flat")
 
 metabench_add_chart(benchmark.remove_if.compilation_time
     DATASETS dataset.remove_if.recursive dataset.remove_if.flat
