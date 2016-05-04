@@ -645,7 +645,25 @@ into the details here.
 
 ### Can't be constexpr (in-place `new`)
 
-<!-- TODO: Show small example -->
+```c++
+#include <new>
+
+constexpr int f() {
+    char c{};
+    ::new (&c) char{'x'};
+    return 1;
+}
+```
+
+```
+[snip].cpp:6:15: error: constexpr function never produces a
+                        constant expression [-Winvalid-constexpr]
+constexpr int f() {
+              ^
+[snip].cpp:8:5: note : subexpression not valid in a constant expression
+    ::new (&c) char{'x'};
+    ^
+```
 
 ----
 
