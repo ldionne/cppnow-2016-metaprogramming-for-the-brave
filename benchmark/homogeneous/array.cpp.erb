@@ -9,7 +9,7 @@
 
 int main () {
     unsigned long long result = 0;
-    for (int iteration = 0; iteration < 1 << 15; ++iteration) {
+    for (int iteration = 0; iteration < 1 << 20; ++iteration) {
 
 #if defined(METABENCH)
         std::array<int, <%= n %>> ints{{

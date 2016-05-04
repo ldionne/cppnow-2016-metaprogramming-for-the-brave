@@ -334,8 +334,59 @@ than constexpr.
 ----
 
 ### Why? Look at the assembly
+#### For tuple
 
-TODO: Show the assembly
+```x86asm
+callq   _rand               #
+movl    %eax, -60(%rbp)     # Call std::rand() a bunch of times
+...                         #
+
+addl    -60(%rbp), %ebx     #
+addl    -64(%rbp), %ebx     #
+addl    -68(%rbp), %ebx     #
+...                         #
+addl    -196(%rbp), %ebx    # Add a bunch of times
+addl    %r13d, %ebx         #
+addl    %r14d, %ebx         #
+addl    %r15d, %ebx         #
+addl    %eax, %ebx          #
+movslq  %ebx, %rsi
+addq    -56(%rbp), %rsi
+```
+
+----
+
+### For array
+
+```x86asm
+callq   _rand               #
+movl    %eax, -176(%rbp)    # Call std::rand() a bunch of times
+...                         #
+
+movdqu  -176(%rbp), %xmm0   #
+movdqu  -160(%rbp), %xmm1   #
+movdqu  -144(%rbp), %xmm2   #
+movdqu  -128(%rbp), %xmm3   #
+paddd   %xmm0, %xmm1        #
+paddd   %xmm2, %xmm1        #
+paddd   %xmm3, %xmm1        #
+movdqu  -112(%rbp), %xmm0   # Pack and vectorize-add a bunch of times
+paddd   %xmm1, %xmm0        #
+...                         #
+movdqu  -32(%rbp), %xmm1    #
+paddd   %xmm0, %xmm1        #
+movdqa  %xmm1, %xmm0        #
+movhlps %xmm0, %xmm0        #
+paddd   %xmm1, %xmm0        #
+phaddd  %xmm0, %xmm0        #
+movd    %xmm0, %eax
+movslq  %eax, %rsi
+addq    %r14, %rsi
+```
+
+Note:
+The assembly is roughly the same for both until 40 elements, and then the
+compiler starts using vectorized additions on the array, but not on the tuple.
 
 ==============================================================================
 
