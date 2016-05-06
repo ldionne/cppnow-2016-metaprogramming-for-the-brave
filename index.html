@@ -337,7 +337,8 @@ than constexpr.
 <iframe width="800" height="400" src="benchmark/homogeneous/execution_time.html" style="background-color: Snow;"></iframe>
 
 Note:
-TODO: std::rand() takes more time than all the rest, that's why the difference doesn't show
+Interestingly, if we remove the call to `escape` in our benchmarks,
+the compiler will optimize the tuple much better than the array.
 
 ----
 

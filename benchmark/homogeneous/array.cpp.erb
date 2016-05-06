@@ -7,14 +7,20 @@
 #include <iostream>
 
 
+static void escape(void* p) {
+    asm volatile("" : : "g"(p) : "memory");
+}
+
 int main () {
     unsigned long long result = 0;
+    std::array<int, <%= n %>> ints{{
+        <%= (1..n).map { 'std::rand()' }.join(', ') %>
+    }};
+
     for (int iteration = 0; iteration < 1 << 20; ++iteration) {
 
 #if defined(METABENCH)
-        std::array<int, <%= n %>> ints{{
-            <%= (1..n).map { 'std::rand()' }.join(', ') %>
-        }};
+        escape(&ints);
         int sum = 0;
         for (int i : ints)
             sum += i;

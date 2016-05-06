@@ -5,7 +5,7 @@ metabench_add_dataset(dataset.homogeneous.array array.cpp.erb "(0..350).step(10)
 metabench_add_dataset(dataset.homogeneous.tuple tuple.cpp.erb "(0..350).step(10)" NAME "hana::tuple" MEDIAN_OF 3)
 
 set_property(TARGET dataset.homogeneous.tuple dataset.homogeneous.array
-             APPEND PROPERTY COMPILE_OPTIONS -O3 -fverbose-asm -g)
+             APPEND PROPERTY COMPILE_OPTIONS -O3)
 
 metabench_add_chart(benchmark.homogeneous.compilation_time
     DATASETS dataset.homogeneous.tuple dataset.homogeneous.array
@@ -21,7 +21,9 @@ metabench_add_chart(benchmark.homogeneous.execution_time
     ASPECT EXECUTION_TIME
 )
 
-add_dependencies(benchmarks
-    benchmark.homogeneous.execution_time
-    benchmark.homogeneous.compilation_time
+add_custom_target(benchmark.homogeneous
+    DEPENDS benchmark.homogeneous.execution_time
+            benchmark.homogeneous.compilation_time
 )
+
+add_dependencies(benchmarks benchmark.homogeneous)

@@ -10,14 +10,20 @@
 namespace hana = boost::hana;
 
 
+static void escape(void* p) {
+    asm volatile("" : : "g"(p) : "memory");
+}
+
 int main () {
     unsigned long long result = 0;
+    hana::tuple<<%= (1..n).map { 'int' }.join(', ') %>> ints{
+        <%= (1..n).map { 'std::rand()' }.join(', ') %>
+    };
+
     for (int iteration = 0; iteration < 1 << 20; ++iteration) {
 
 #if defined(METABENCH)
-        hana::tuple<<%= (1..n).map { 'int' }.join(', ') %>> ints{
-            <%= (1..n).map { 'std::rand()' }.join(', ') %>
-        };
+        escape(&ints);
         int sum = 0;
         hana::for_each(ints, [&](int i) { sum += i; });
 
