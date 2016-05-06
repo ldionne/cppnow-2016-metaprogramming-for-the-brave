@@ -225,8 +225,6 @@ Note:
 Mangling long symbols takes time and RAM. Also, they appear in the object files
 and outputing a large object file takes time (I/O is slow).
 
-TODO: Suggest a solution for the compile-times? Talk about anonymous inline namespaces?
-
 ----
 
 ### Second problem: huge executables
@@ -263,17 +261,7 @@ You can make the executable even smaller by using `strip` after doing LTO.
 
 ====================
 
-### Tip 4: constexpr is not a silver bullet
-
-----
-
-TODO:
-Show an example of code that is better written using classic TMP techniques
-than constexpr.
-
-====================
-
-### Tip 5: Never assume, always benchmark
+### Tip 4: Never assume, always benchmark
 
 - Different compilers behave differently
 - The execution model is hard to predict
@@ -332,7 +320,7 @@ than constexpr.
 
 ====================
 
-### Tip 6: Know when to use homogeneous containers
+### Tip 5: Know when to use homogeneous containers
 
 ----
 
@@ -647,21 +635,30 @@ variables.
 
 ----
 
-### Can optimize empty types easily
+### Can do aggressive optimizations easily
 
-<!-- TODO -->
+Note:
+Precise control over element storage => optimizing empty types (even when final)
+and other packing/alignment optimizations are easy to implement.
 
 ----
 
-### Easy to optimize for the compiler
-
-<!-- TODO: Show generated assembly of both techniques -->
+### Should be easy on the optimizer
 
 ----
 
 ### Possibility of pre-allocating storage
 
-<!-- TODO: Experiment with pre-allocating algorithms -->
+```c++
+tuple<int, char, double> tuple{uninitialized};
+tuple.push_back<int>(1);
+tuple.push_back<char>('2');
+tuple.push_back<double>(3.3);
+```
+
+Note:
+This opens the door to some interesting ways of using tuples and designing
+algorithms on tuples.
 
 ====================
 
@@ -699,15 +696,6 @@ multiple inheritance. It appears that constexpr evaluation is far from free.
 Again, always benchmark!
 
 ==============================================================================
-
-### Future directions for Hana
-
-- Lazy views (experimental support right now)
-- Dive deeper into the `aligned_storage` alternative
-
-TODO: complete future directions
-
-====================
 
 ## Key takeaways
 
