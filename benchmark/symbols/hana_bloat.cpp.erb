@@ -10,7 +10,9 @@ namespace hana = boost::hana;
 template <int i>
 auto buildLargeMap() {
     return hana::unpack(hana::range_c<int, 0, i>, [](auto ...x) {
-        return hana::make_map(hana::make_pair(x, std::vector<int>{})...);
+        return hana::make_map(
+            hana::make_pair(x, std::vector<int>{})...
+        );
     });
 }
 
