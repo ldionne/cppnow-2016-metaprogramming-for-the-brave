@@ -30,7 +30,7 @@ struct tuple_element;
 
 template <std::size_t n, typename ...T>
 struct tuple_element<n, boost::hana::tuple<T...>> {
-    using type = typename std::tuple_element_t<n, std::tuple<T...>>::type;
+    using type = typename std::tuple_element<n, std::tuple<T...>>::type;
 };
 
 template <typename ...T>

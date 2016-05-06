@@ -57,6 +57,29 @@ namespace mystd {
     };
 }
 
+template <typename ...Tuples>
+struct tuple_cat_type;
+
+template <>
+struct tuple_cat_type<> {
+    using type = boost::hana::tuple<>;
+};
+
+template <typename Tuple>
+struct tuple_cat_type<Tuple> {
+    using type = Tuple;
+};
+
+template <typename ...T, typename ...U, typename ...Tuples>
+struct tuple_cat_type<boost::hana::tuple<T...>,
+                      boost::hana::tuple<U...>,
+                      Tuples...>
+{
+    using type = typename tuple_cat_type<
+        boost::hana::tuple<T..., U...>,
+        Tuples...
+    >::type;
+};
 
 // sample(flatten_indices-1)
 template <std::size_t ...Lengths>
@@ -79,14 +102,14 @@ struct flatten_indices {
 // end-sample
 
 // sample(flatten_indices-2)
-    template <typename Tuples, std::size_t ...i>
-    static constexpr auto
+    template <typename Result, typename Tuples, std::size_t ...i>
+    static constexpr Result
     apply(Tuples tuples, std::index_sequence<i...>) {
-        return boost::hana::make_tuple(
+        return Result{
             boost::hana::at_c<outer[i]>(
                 boost::hana::at_c<inner[i]>(tuples)
             )...
-        );
+        };
     }
 };
 // end-sample
@@ -97,7 +120,10 @@ constexpr auto tuple_cat(Tuples&& ...tuples) {
     using Indices = flatten_indices<
         tuple_size<std::remove_reference_t<Tuples>>::value...
     >;
-    return Indices::apply(
+    using Result = typename tuple_cat_type<
+        std::remove_reference_t<Tuples>...
+    >::type; // implementation not relevant
+    return Indices::template apply<Result>(
         ::forward_as_tuple(std::forward<Tuples>(tuples)...),
         std::make_index_sequence<Indices::flat_length>{}
     );
