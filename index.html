@@ -239,9 +239,27 @@ TODO: Suggest a solution for the compile-times? Talk about anonymous inline name
 
 ----
 
-### No! Have to use LTO
+### Sometimes, but not always
 
-TODO: Show an example where optimization does not do the trick, and only LTO does it
+<pre><code class="sample lang-cpp" sample="benchmark/symbols/hana_bloat.cpp.erb#main"></code></pre>
+
+Note:
+Thanks to Jason Rice for work on this test case.
+
+----
+
+### Have to use LTO
+
+<iframe width="800" height="400" src="benchmark/symbols/hana_bloat_executable_size.html" style="background-color: Snow;"></iframe>
+
+Note:
+You can make the executable even smaller by using `strip` after doing LTO.
+
+----
+
+### Of course, LTO is not free
+
+<iframe width="800" height="400" src="benchmark/symbols/hana_bloat_link_time.html" style="background-color: Snow;"></iframe>
 
 ====================
 

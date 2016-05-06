@@ -1,0 +1,22 @@
+#include <boost/hana/map.hpp>
+#include <boost/hana/pair.hpp>
+#include <boost/hana/range.hpp>
+#include <boost/hana/unpack.hpp>
+
+#include <vector>
+namespace hana = boost::hana;
+
+// sample(main)
+template <int i>
+auto buildLargeMap() {
+    return hana::unpack(hana::range_c<int, 0, i>, [](auto ...x) {
+        return hana::make_map(hana::make_pair(x, std::vector<int>{})...);
+    });
+}
+
+using LargeMap = decltype(buildLargeMap<<%= n %>>());
+
+int main() {
+    auto x = LargeMap{};
+}
+// end-sample
