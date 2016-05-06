@@ -67,8 +67,17 @@ struct tuple {
     }
 // end-sample
 
+    constexpr void const* get_raw(std::size_t i) const {
+        if (i >= sizeof...(T))
+            throw "out of bounds access in a tuple";
+        return ((char*)&storage_) + offsets[i];
+    }
+
     explicit constexpr tuple(uninitialized&&) { }
+
+// sample(uninitialized)
     explicit constexpr tuple(uninitialized const&) { }
+// end-sample
 
 // sample(default_ctor)
     tuple() {
@@ -119,5 +128,11 @@ constexpr Nth& get(tuple<T...>& ts) {
     return *static_cast<Nth*>(ts.get_raw(i));
 }
 // end-sample
+
+template <std::size_t i, typename ...T,
+    typename Nth = typename nth_type<i, T...>::type>
+constexpr Nth const& get(tuple<T...> const& ts) {
+    return *static_cast<Nth const*>(ts.get_raw(i));
+}
 
 #endif

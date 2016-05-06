@@ -631,7 +631,19 @@ variables.
 
 ### Some algorithms are killer
 
-<!-- TODO: tuple.aligned_storage.scan example -->
+#### First, add the following constructor
+
+<pre><code class="sample" sample="code/tuple/aligned_storage.hpp#uninitialized"></code></pre>
+
+----
+
+#### Now, let's implement partial sums
+
+<pre><code class="sample" sample="code/tuple/aligned_storage_scan.cpp#partial_sum"></code></pre>
+
+----
+
+<pre><code class="sample" sample="code/tuple/aligned_storage_scan.cpp#partial_sum_impl"></code></pre>
 
 ----
 
