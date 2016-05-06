@@ -30,7 +30,7 @@ struct tuple_element;
 
 template <std::size_t n, typename ...T>
 struct tuple_element<n, boost::hana::tuple<T...>> {
-    using type = typename std::tuple_element<n, std::tuple<T...>>::type;
+    using type = typename std::tuple_element_t<n, std::tuple<T...>>::type;
 };
 
 template <typename ...T>
@@ -83,8 +83,8 @@ struct tuple_cat_impl<boost::hana::tuple<T...>,
                               Tuple0&& t0, Tuple1&& t1,
                               Tuples&& ...tpls)
     {
-        using T0 = typename std::remove_reference<Tuple0>::type;
-        using T1 = typename std::remove_reference<Tuple1>::type;
+        using T0 = std::remove_reference_t<Tuple0>;
+        using T1 = std::remove_reference_t<Tuple1>;
         return tuple_cat_impl<
             boost::hana::tuple<T...,
                 typename apply_cv<Tuple0,
@@ -112,7 +112,7 @@ constexpr boost::hana::tuple<> tuple_cat() {
 
 template <typename Tuple0, typename ...Tuples>
 constexpr auto tuple_cat(Tuple0&& t0, Tuples&& ...tpls) {
-    using T0 = typename std::remove_reference<Tuple0>::type;
+    using T0 = std::remove_reference_t<Tuple0>;
     return tuple_cat_impl<
         boost::hana::tuple<>,
         std::index_sequence<>,
