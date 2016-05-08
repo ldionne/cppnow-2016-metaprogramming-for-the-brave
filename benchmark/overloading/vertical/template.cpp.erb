@@ -1,0 +1,17 @@
+// Copyright Louis Dionne 2016
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE.md or copy at http://boost.org/LICENSE_1_0.txt)
+
+template <int>
+struct arg { using type = arg; };
+
+template <typename T>
+void function(T) { }
+
+int main() {
+#if defined(METABENCH)
+    <% (1..n).each do |i| %>
+        function(arg<<%= i %>>{});
+    <% end %>
+#endif
+}
