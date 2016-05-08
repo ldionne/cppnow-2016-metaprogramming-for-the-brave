@@ -104,14 +104,6 @@
 
 TODO: Find illustrative example
 
-
-Note:
-TODO:
-It would be interesting to benchmark the cost of just instantiating a
-function template with n arguments, and n functions templates with 1
-argument. Perhaps the higher cost is caused by function instantiation,
-not overloading per-se.
-
 ----
 
 ### Horizontal
@@ -132,6 +124,10 @@ template <>             struct specialized<arg<1>, ..., arg<n>> { };
 
 int main() { specialized<arg<1>, ..., arg<n>>{}; }
 ```
+
+Note:
+The 'template' curve represents the cost of instantiating a function template
+once with `n` arguments.
 
 ----
 
@@ -169,6 +165,10 @@ int main() {
     specialized<arg<n>>{};
 }
 ```
+
+Note:
+The 'template' curve represents the cost of instantiating a function template
+`n` different times, each time with 1 argument.
 
 ----
 
