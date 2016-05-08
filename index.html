@@ -113,19 +113,19 @@
 
 ```c++
 template <int> struct arg { };
-void function(arg<1>, ..., arg<n>) { }
+void overloaded(arg<1>, ..., arg<n>) { }
 
-int main() { function(arg<1>{}, ..., arg<n>{}); }
+int main() { overloaded(arg<1>{}, ..., arg<n>{}); }
 ```
 
 vs
 
 ```c++
 template <int>          struct arg { };
-template <typename ...> struct function { };
-template <>             struct function<arg<1>, ..., arg<n>> { };
+template <typename ...> struct specialized { };
+template <>             struct specialized<arg<1>, ..., arg<n>> { };
 
-int main() { function<arg<1>, ..., arg<n>>{}; }
+int main() { specialized<arg<1>, ..., arg<n>>{}; }
 ```
 
 ----
@@ -138,14 +138,14 @@ int main() { function<arg<1>, ..., arg<n>>{}; }
 
 ```c++
 template <int> struct arg { };
-void function(arg<1>) { }
+void overloaded(arg<1>) { }
 ...
-void function(arg<n>) { }
+void overloaded(arg<n>) { }
 
 int main() {
-    function(arg<1>{});
+    overloaded(arg<1>{});
     ...
-    function(arg<n>{});
+    overloaded(arg<n>{});
 }
 ```
 
@@ -153,15 +153,15 @@ vs
 
 ```c++
 template <int>      struct arg { };
-template <typename> struct function { };
-template <>         struct function<arg<1>> { };
+template <typename> struct specialized { };
+template <>         struct specialized<arg<1>> { };
 ...
-template <>         struct function<arg<n>> { };
+template <>         struct specialized<arg<n>> { };
 
 int main() {
-    function<arg<1>>{};
+    specialized<arg<1>>{};
     ...
-    function<arg<n>>{};
+    specialized<arg<n>>{};
 }
 ```
 
