@@ -13,8 +13,8 @@ metabench_add_chart(benchmark.overloading.horizontal
 )
 
 # vertical
-metabench_add_dataset(dataset.overloading.vertical.overloading    horizontal/overloading.cpp.erb    "(0..2000).step(50)" NAME "overloading")
-metabench_add_dataset(dataset.overloading.vertical.specialization horizontal/specialization.cpp.erb "(0..2000).step(50)" NAME "specialization")
+metabench_add_dataset(dataset.overloading.vertical.overloading    vertical/overloading.cpp.erb    "(0..2000).step(50)" NAME "overloading")
+metabench_add_dataset(dataset.overloading.vertical.specialization vertical/specialization.cpp.erb "(0..2000).step(50)" NAME "specialization")
 
 metabench_add_chart(benchmark.overloading.vertical
     DATASETS dataset.overloading.vertical.overloading

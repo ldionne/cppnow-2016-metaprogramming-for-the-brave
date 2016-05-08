@@ -43,8 +43,6 @@
                          data-notes="^Note:">
 
 <!-- TODO:
-- Consider interleaving tips with the rest of the presentation.
-- Consider moving the part on Metabench to the end.
 - Use a Metabench that reports link times properly
  -->
                 <script type="text/template">
@@ -102,7 +100,17 @@
 
 ====================
 
-### Tip 2: Prefer specialization to overloading
+### Specialization vs overloading
+
+TODO: Find illustrative example
+
+
+Note:
+TODO:
+It would be interesting to benchmark the cost of just instantiating a
+function template with n arguments, and n functions templates with 1
+argument. Perhaps the higher cost is caused by function instantiation,
+not overloading per-se.
 
 ----
 
@@ -168,7 +176,12 @@ int main() {
 
 ====================
 
-### Tip 3: Keep your symbols short
+## Tip 2
+### Prefer specialization to overloading for implementation details
+
+====================
+
+### Let's take a look at symbol lengths
 
 ----
 
@@ -255,70 +268,12 @@ You can make the executable even smaller by using `strip` after doing LTO.
 
 ====================
 
-### Tip 4: Never assume, always benchmark
-
-- Different compilers behave differently
-- The execution model is hard to predict
-- Simply counting instantiations doesn't work
-
-----
-
-<div style="position:relative" >
-    <h3 class="fragment fade-out" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" data-fragment-index="1">
-        But compile-time benchmarks are hard to set up...
-    </h3>
-    <h3 class="fragment fade-in" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" data-fragment-index="1">
-        Not anymore!
-    </h3>
-</div>
-
-----
-
-### Introducing [Metabench](https://github.com/ldionne/metabench)
-
-----
-
-### Goals
-
-- Simple
-- Self-contained
-
-----
-
-### 1. Write your benchmark
-
-`std.cpp.erb`:
-<pre><code class="sample lang-cpp" sample="benchmark/make_tuple/std.cpp.erb#main"></code></pre>
-
-`hana.cpp.erb`:
-<pre><code class="sample lang-cpp" sample="benchmark/make_tuple/hana.cpp.erb#main"></code></pre>
-
-----
-
-### 2. Setup Metabench
-
-`CMakeLists.txt`:
-<pre><code class="sample lang-cmake" sample="benchmark/make_tuple/CMakeLists.txt#main"></code></pre>
-
-----
-
-### 3. Build the benchmark
-
-<img style="border:0" src="img/metabench-asciicast.gif"></img>
-
-----
-
-### 4. Tadam!
-
-<iframe width="800" height="400" src="benchmark/make_tuple/make_tuple.html" style="background-color: Snow;"></iframe>
+## Tip 3
+### Use LTO and watch out for long symbols causing bloat
 
 ====================
 
-### Tip 5: Know when to use homogeneous containers
-
-----
-
-### Which one is better?
+### Should I use a tuple or an array?
 
 <pre><code class="sample" sample="code/homogeneous.cpp#tuple"></code></pre>
 
@@ -397,23 +352,28 @@ Note:
 The assembly is roughly the same for both until 40 elements, and then the
 compiler starts using vectorized additions on the array, but not on the tuple.
 
-==============================================================================
+====================
 
-## Implementing tuple algorithms
+## Tip 4
+### Prefer homogeneous containers when possible
 
 ====================
+
+### Implementing tuple algorithms
+
+----
 
 ### `for_each`
 
 <pre><code class="sample" sample="code/for_each.cpp#main"></code></pre>
 
-====================
+----
 
 ### `transform`
 
 <pre><code class="sample" sample="code/transform.cpp#main"></code></pre>
 
-====================
+----
 
 ### `select`
 
@@ -532,12 +492,12 @@ uses a naive recursive approach, but an unrolled one would be better.
 
 ====================
 
-### The fundamental idea
-Perform the computation on indices, and then involve the original sequence(s)
+## Tip 5
+### Offload computations to compile-time by working on indices
 
-==============================================================================
+====================
 
-## Tuples
+### Let's take a look at tuples
 
 ====================
 
@@ -568,8 +528,8 @@ stdlibc++, I'm looking at you!
 ### Aligned storage (experimental)
 
 Note:
-Alisdair will present something similar in his presentation, so I won't go
-into the details here.
+Alisdair Meredith will present something similar in his presentation, so I
+won't go into the details here.
 
 ----
 
@@ -668,6 +628,15 @@ algorithms on tuples.
 
 ====================
 
+## Tip 6
+### Choose the right representation for the task at hand
+
+Note:
+In the current state of things, no single tuple implementation is good
+at everything.
+
+====================
+
 ### Downsides of aligned storage
 
 ----
@@ -700,6 +669,66 @@ Note:
 This is surprising, as we would expect pure constexpr to be faster than
 multiple inheritance. It appears that constexpr evaluation is far from free.
 Again, always benchmark!
+
+====================
+
+## Tip 7
+### Never assume, always benchmark!
+
+- Different compilers behave differently
+- The execution model is hard to predict
+- Simply counting instantiations doesn't work
+
+----
+
+<div style="position:relative" >
+    <h3 class="fragment fade-out" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" data-fragment-index="1">
+        But compile-time benchmarks are hard to set up...
+    </h3>
+    <h3 class="fragment fade-in" style="position:absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" data-fragment-index="1">
+        Not anymore!
+    </h3>
+</div>
+
+----
+
+### Introducing [Metabench](https://github.com/ldionne/metabench)
+
+----
+
+### Goals
+
+- Simple
+- Self-contained
+
+----
+
+### 1. Write your benchmark
+
+`std.cpp.erb`:
+<pre><code class="sample lang-cpp" sample="benchmark/make_tuple/std.cpp.erb#main"></code></pre>
+
+`hana.cpp.erb`:
+<pre><code class="sample lang-cpp" sample="benchmark/make_tuple/hana.cpp.erb#main"></code></pre>
+
+----
+
+### 2. Setup Metabench
+
+`CMakeLists.txt`:
+<pre><code class="sample lang-cmake" sample="benchmark/make_tuple/CMakeLists.txt#main"></code></pre>
+
+----
+
+### 3. Build the benchmark
+
+<img style="border:0" src="img/metabench-asciicast.gif"></img>
+
+----
+
+### 4. Tadam!
+
+<iframe width="800" height="400" src="benchmark/make_tuple/make_tuple.html" style="background-color: Snow;"></iframe>
 
 ==============================================================================
 
