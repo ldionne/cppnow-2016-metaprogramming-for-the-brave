@@ -46,6 +46,31 @@ set(METABENCH_DIR ${CMAKE_CURRENT_BINARY_DIR}/_metabench)
 #   useful to make sure that benchmarks stay sane as part of continuous
 #   integration scripts, for example.
 #
+#   What is measured?
+#   -----------------
+#   When generating a dataset, Metabench records information related to
+#   several different aspects of the executable. All the different aspects
+#   are always stored in the dataset, and the aspect being displayed on a
+#   chart can be controlled with the `ASPECT` option of `metabench_add_chart`.
+#   Currently, Metabench measures the following aspects:
+#       - Compilation time in seconds. This is the time required to generate
+#         the object file from the `.cpp` file. This includes preprocessing,
+#         but does not include linking time. Compilation time is treated in
+#         a slightly special way; the program is first built with the
+#         `METABENCH` macro undefined, and then with the macro defined.
+#         The compilation time is then taken to be the difference of the
+#         measurement with the macro defined and without the macro defined.
+#       - Link time in seconds. This is the time required to generate the
+#         executable from the object file. This does not include the
+#         compilation time.
+#       - Executable size in KB. This is the size of the executable created
+#         from the `.cpp` file.
+#       - Execution time in seconds. This is the time required to execute the
+#         built program. This can be used to get rough runtime performance
+#         measurements, but Metabench's resolution is too low for precision
+#         benchmarking. To measure this, Metabench runs the built executable
+#         with no arguments, so the program should support being run this way.
+#
 #   Parameters
 #   ----------
 #   target:
@@ -394,7 +419,6 @@ file(WRITE ${METABENCH_RB_PATH}
 "    base = compile[code]                                                                           \n"
 "    datum = compile[%{#define METABENCH\\n} + code]                                                \n"
 "    datum['compilation_time'] = datum['compilation_time'] - base['compilation_time']               \n"
-"    datum['link_time'] = datum['link_time'] - base['link_time']                                    \n"
 "    data << datum                                                                                  \n"
 "  end                                                                                              \n"
 "  return data                                                                                      \n"
@@ -508,7 +532,7 @@ file(WRITE ${CHART_HTML_ERB_PATH}
 "        chart.x(function(datum){ return datum.n; })                                                      \n"
 "             .y(function(datum){ return datum.compilation_time; })                                       \n"
 "             .yAxis.options({                                                                            \n"
-"               axisLabel: customSettings.YLABEL || 'Time',                                               \n"
+"               axisLabel: customSettings.YLABEL || 'Compilation time',                                   \n"
 "               tickFormat: function(val){ return d3.format('.2f')(val) + 's'; }                          \n"
 "             });                                                                                         \n"
 "      }                                                                                                  \n"
