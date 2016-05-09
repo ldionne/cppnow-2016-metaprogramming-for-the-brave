@@ -16,9 +16,7 @@ auto buildLargeMap() {
     });
 }
 
-using LargeMap = decltype(buildLargeMap<<%= n %>>());
-
 int main() {
-    auto x = LargeMap{};
+    auto x = buildLargeMap<<%= n %>>();
 }
 // end-sample
